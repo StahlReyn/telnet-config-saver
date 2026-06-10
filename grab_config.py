@@ -10,10 +10,11 @@ from scanport import scan_ports
 # Change 'cisco_ios_telnet' to 'hp_procurve_telnet', 'juniper_junos_telnet', etc., if needed.
 device = {
     'device_type': 'cisco_ios_telnet',
-    'host': '172.19.20.218',
-    'username': 'admin',
-    'password': 'pnet',
-    'secret': 'any', # Cisco enable mode
+    # 'host': '172.19.20.218',
+    'host': '10.101.168.242',
+    'username': 'cisco',
+    'password': 'cisco',
+    'secret': 'cisco', # Cisco enable mode
     'port': 30001,
 }
 
@@ -25,7 +26,7 @@ MAX_WORKER = 100             # Max threads for scanning ports
 CONFIG_TIMEOUT = 30.0            # Seconds to wait for config retrieval
 
 def main():
-    cur_path = create_folder_structure(base_path="output")
+    cur_path = create_folder_structure(base_path="output", name="MPLS-XR")
 
     discovered = scan_ports(device['host'], PORT_START, PORT_END)
     print_with_timestamp(f"Scan complete. Discovered open ports: {discovered}")
@@ -44,26 +45,31 @@ def main():
             try:
                 future.result()
             except NetmikoTimeoutException:
-                print_error("Connection timed out. Check the IP address or network connectivity.")
+                print_error(f"{port_device['host']}:{port} - Connection timed out. Check the IP address or network connectivity.")
             except NetmikoAuthenticationException:
-                print_error("Authentication failed. Verify username and passwords.")
+                print_error(f"{port_device['host']}:{port} - Authentication failed. Verify username and passwords.")
             except Exception as e:
-                print_error(f"An unexpected error occurred: {e}")
+                print_error(f"{port_device['host']}:{port} - An unexpected error occurred: {e}")
 
-def create_folder_structure(base_path):
+def create_folder_structure(base_path, name=None):
     # Output folder
     cur_path = Path(base_path)
     cur_path.mkdir(parents=True, exist_ok=True)
 
-    # Year and Month Number inside Output
-    year_month_name = datetime.now().strftime("%Y-%m")
-    cur_path = cur_path / year_month_name
-    cur_path.mkdir(parents=True, exist_ok=True)
+    if name is None:
+        # Year and Month Number inside Output
+        year_month_name = datetime.now().strftime("%Y-%m")
+        cur_path = cur_path / year_month_name
+        cur_path.mkdir(parents=True, exist_ok=True)
 
-    # Day Folder inside month
-    day_folder = datetime.now().strftime("%d")
-    cur_path = cur_path / day_folder
-    cur_path.mkdir(parents=True, exist_ok=True)
+        # Day Folder inside month
+        day_folder = datetime.now().strftime("%d")
+        cur_path = cur_path / day_folder
+        cur_path.mkdir(parents=True, exist_ok=True)
+    else:
+        cur_path = cur_path / name
+        cur_path.mkdir(parents=True, exist_ok=True)
+
     return cur_path
 
 def grab_config(device, filepath=None):
@@ -78,9 +84,11 @@ def grab_config(device, filepath=None):
     config_output = net_connect.send_command("show running-config", read_timeout=CONFIG_TIMEOUT)
     
     # Save the output to a local text file
-    filename = filepath / f"config_{device['port']}_{hostname}.ios"
+    filename = f"config_{device['port']}_{hostname}.ios"
+    if filepath is not None:
+        filename = filepath / filename
     with open(filename, "w") as f:
-        f.write(config_output)
+        f.write(config_output) # type: ignore
         
     print_with_timestamp(f"Success! Configuration saved to {filename}")
     
