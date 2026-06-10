@@ -28,9 +28,17 @@ PORT_TIMEOUT = 1.0              # Seconds to wait for a response
 MAX_WORKER = 100             # Max threads for scanning ports
 CONFIG_TIMEOUT = 30.0            # Seconds to wait for config retrieval
 
+COLOR_RESET = "\033[0m"
+COLOR_RED = "\033[31m"
+
 def print_with_timestamp(message):
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
     print(f"[{timestamp}] {message}")
+
+# Print Error with Red Color
+def print_error(message):
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
+    print(f"{COLOR_RED}[{timestamp}] ERROR: {message}{COLOR_RESET}", file=sys.stderr)
 
 def check_port(host, port):
     """Attempts a TCP connection to verify if a port is open."""
@@ -80,11 +88,11 @@ def main():
             try:
                 future.result()
             except NetmikoTimeoutException:
-                print_with_timestamp("Error: Connection timed out. Check the IP address or network connectivity.")
+                print_error("Connection timed out. Check the IP address or network connectivity.")
             except NetmikoAuthenticationException:
-                print_with_timestamp("Error: Authentication failed. Verify username and passwords.")
+                print_error("Authentication failed. Verify username and passwords.")
             except Exception as e:
-                print_with_timestamp(f"An unexpected error occurred: {e}")
+                print_error(f"An unexpected error occurred: {e}")
 
 def create_folder_structure(base_path):
     # Output folder
@@ -107,6 +115,7 @@ def grab_config(device, filepath=None):
     # Establish connection
     net_connect = ConnectHandler(**device)
     net_connect.enable()
+    net_connect.set_base_prompt()
 
     hostname = net_connect.base_prompt
     print_with_timestamp("Got Hostname: " + hostname + " | Retrieving configuration...")
