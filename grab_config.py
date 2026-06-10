@@ -1,9 +1,10 @@
-import sys
-import re
 from netmiko import ConnectHandler
 from netmiko.exceptions import NetmikoTimeoutException, NetmikoAuthenticationException
+from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
 from pathlib import Path
+from printutil import print_with_timestamp, print_error
+from scanport import scan_ports
 
 # Define device connection parameters
 # Change 'cisco_ios_telnet' to 'hp_procurve_telnet', 'juniper_junos_telnet', etc., if needed.
@@ -16,57 +17,12 @@ device = {
     'port': 30001,
 }
 
-port_list = [30001, 30006, 30002, 30005]
+port_list = []
 
-import socket
-from concurrent.futures import ThreadPoolExecutor
-
-# Target settings
 PORT_START = 30000
 PORT_END = 30030            # max is 65535
-PORT_TIMEOUT = 1.0              # Seconds to wait for a response
 MAX_WORKER = 100             # Max threads for scanning ports
 CONFIG_TIMEOUT = 30.0            # Seconds to wait for config retrieval
-
-COLOR_RESET = "\033[0m"
-COLOR_RED = "\033[31m"
-
-def print_with_timestamp(message):
-    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
-    print(f"[{timestamp}] {message}")
-
-# Print Error with Red Color
-def print_error(message):
-    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
-    print(f"{COLOR_RED}[{timestamp}] ERROR: {message}{COLOR_RESET}", file=sys.stderr)
-
-def check_port(host, port):
-    """Attempts a TCP connection to verify if a port is open."""
-    # AF_INET specifies IPv4, SOCK_STREAM specifies TCP
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
-        sock.settimeout(PORT_TIMEOUT)
-        # connect_ex returns 0 if the connection succeeded
-        result = sock.connect_ex((host, port))
-        if result == 0:
-            return port
-    return None
-
-def scan_ports(host, start, end):
-    print_with_timestamp(f"Scanning {host} from port {start} to {end}...")
-    open_ports = []
-    
-    # Use a thread pool to test multiple ports in parallel
-    with ThreadPoolExecutor(max_workers=MAX_WORKER) as executor:
-        # Map the check_port function across the desired port range
-        futures = [executor.submit(check_port, host, port) for port in range(start, end + 1)]
-        
-        for future in futures:
-            port = future.result()
-            if port is not None:
-                print_with_timestamp(f"[+] Port {port} is OPEN")
-                open_ports.append(port)
-                
-    return open_ports
 
 def main():
     cur_path = create_folder_structure(base_path="output")
