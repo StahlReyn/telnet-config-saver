@@ -21,7 +21,6 @@
                     <div class="form-group">
                         <label for="deviceType">Device Type</label>
                         <select id="deviceType" name="device_type" required>
-                            <option value="">Select a device type</option>
                             <option value="cisco_ios_telnet">Cisco IOS (Telnet)</option>
                             <option value="cisco_xr_telnet">Cisco XR (Telnet)</option>
                             <option value="juniper_telnet">Juniper (Telnet)</option>
@@ -29,11 +28,11 @@
                     </div>
                     <div class="form-group">
                         <label for="host">Host/IP Address</label>
-                        <input type="text" id="host" name="host" placeholder="e.g., 172.19.20.218" required>
+                        <input type="text" id="host" name="host" placeholder="e.g., 172.19.20.218" value="172.19.20.218" required>
                     </div>
                     <div class="form-group">
                         <label for="port">Port</label>
-                        <input type="number" id="port" name="port" placeholder="e.g., 30001" value="23" required>
+                        <input type="number" id="port" name="port" placeholder="e.g., 23" value="30001" required>
                     </div>
                     <div class="form-group">
                         <label for="username">Username</label>
@@ -53,8 +52,6 @@
                     <button type="submit" class="btn-submit">Fetch Configuration</button>
                     <button type="reset" class="btn-clear">Clear Form</button>
                 </div>
-
-                <div id="status" class="status"></div>
             </form>
         </div>
 
@@ -75,9 +72,6 @@
             </div>
         </div>
     </div>
-
-    <script>
-        
-    </script>
+    <div id="status" class="status">AAAA</div>
 </body>
 </html>

@@ -8,12 +8,21 @@ const hideNoServicePolicyCheckbox = document.getElementById('hideNoServicePolicy
 
 const SERVER_URL = "http://127.0.0.1:8000/interfaces"
 
+let current_device = {}
 let current_data = {}
 
-async function getDeviceConfig(event) {
-    event.preventDefault();
+let template_bandwidth_list = [
+    "10M",
+    "20M",
+    "50M",
+    "100M",
+    "200M",
+    "300M",
+]
 
-    const formData = {
+// ================================ REQUESTS ================================
+function getDeviceFormData() {
+    return {
         device_type: document.getElementById('deviceType').value,
         host: document.getElementById('host').value,
         port: parseInt(document.getElementById('port').value),
@@ -21,10 +30,10 @@ async function getDeviceConfig(event) {
         password: document.getElementById('password').value,
         secret: document.getElementById('secret').value,
     };
+}
 
-    showStatus('loading', 'Fetching configuration...');
-    resultsDiv.classList.remove('show');
-
+async function postWithStatus(formData, successCallback) {
+    showStatus('loading', 'Processing Request...');
     try {
         const response = await fetch(SERVER_URL, {
             method: 'POST',
@@ -43,14 +52,27 @@ async function getDeviceConfig(event) {
         if (data.error) {
             showStatus('error', `Error: ${data.error}`);
         } else {
-            showStatus('success', 'Configuration retrieved successfully!');
-            current_data = data;
-            refreshDisplayResults();
+            showStatus('success', 'Data got successfully!');
+            successCallback(data);
         }
     } catch (error) {
-        showStatus('error', `Failed to fetch configuration: ${error.message}`);
+        showStatus('error', `Failed to fetch: ${error.message}`);
     }
 }
+
+async function getDeviceConfig(event) {
+    event.preventDefault();
+
+    current_device = getDeviceFormData()
+    resultsDiv.classList.remove('show');
+    
+    await postWithStatus(current_device, (data) => {
+        current_data = data
+        refreshDisplayResults()
+    })
+}
+
+// ================================ STATUS ================================
 
 function showStatus(type, message) {
     statusDiv.textContent = message;
@@ -88,13 +110,12 @@ function createInterfaceCard(interfaceName, config) {
     const card = document.createElement('div');
     card.className = 'interface-card';
 
-    const nameDiv = document.createElement('div');
-    nameDiv.className = 'interface-name';
-    nameDiv.textContent = interfaceName;
-
-    const descDiv = document.createElement('div');
-    descDiv.className = 'interface-description';
-    descDiv.textContent = config.description || '(No description)';
+    const nameDescDiv = document.createElement('div');
+    nameDescDiv.className = 'interface-name-container';
+    nameDescDiv.innerHTML = (`
+        <div class="interface-name">${interfaceName}</div>
+        <div class="interface-description">${config.description || '(No description)'}</div>
+    `)
 
     const servicesDiv = document.createElement('div');
     servicesDiv.className = 'service-instances';
@@ -103,24 +124,23 @@ function createInterfaceCard(interfaceName, config) {
         servicesDiv.innerHTML = '<div class="service-instances-empty">No service instances</div>';
     } else {
         config.service_instance.forEach(instance => {
-            const instanceDiv = createInstanceCard(instance)
+            const instanceDiv = createInstanceCard(interfaceName, instance)
             servicesDiv.appendChild(instanceDiv);
         });
     }
 
-    card.appendChild(nameDiv);
-    card.appendChild(descDiv);
+    card.appendChild(nameDescDiv);
     card.appendChild(servicesDiv);
     return card;
 }
 
-function createInstanceCard(instance) {
+function createInstanceCard(interfaceName, instance) {
     const instanceDiv = document.createElement('div');
     instanceDiv.className = 'service-instance';
 
     const idDiv = document.createElement('div');
     idDiv.className = 'service-id';
-    idDiv.textContent = `Instance ID: ${instance.id}`;
+    idDiv.textContent = `${instance.id}`;
 
     const policyDiv = document.createElement('div');
     policyDiv.className = 'service-policy';
@@ -139,9 +159,38 @@ function createInstanceCard(instance) {
         policyDiv.innerHTML = policyHtml;
     }
 
+    const bandwithButtonsContainer = document.createElement('div');
+    bandwithButtonsContainer.className = 'bandwith-buttons-container';
+    for (const bandwidth of template_bandwidth_list) {
+        const bandwidthButton = createBandwidthButton(interfaceName, instance.id, bandwidth)
+        bandwithButtonsContainer.appendChild(bandwidthButton);
+    }
+
     instanceDiv.appendChild(idDiv);
     instanceDiv.appendChild(policyDiv);
+    instanceDiv.appendChild(bandwithButtonsContainer);
     return instanceDiv
+}
+
+function createBandwidthButton(interfaceName, instanceId, bandwidth) {
+    const bandwidthButton = document.createElement('button');
+    bandwidthButton.className = 'bandwidth-button';
+    bandwidthButton.textContent = bandwidth
+
+    const formData = {
+        "device": current_device,
+        "service_policy": {
+            "interface": interfaceName,
+            "service_instance_id": instanceId,
+            "bandwidth": bandwidth
+        }
+    }
+
+    bandwidthButton.addEventListener('click', async (e) => {
+        await postWithStatus(formData)
+    })
+
+    return bandwidthButton
 }
 
 form.addEventListener('submit', getDeviceConfig);
