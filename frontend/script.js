@@ -59,58 +59,67 @@ function displayResults(data) {
 
     for (const [interfaceName, config] of Object.entries(data)) {
         if (typeof config !== 'object') continue;
-
-        const card = document.createElement('div');
-        card.className = 'interface-card';
-
-        const nameDiv = document.createElement('div');
-        nameDiv.className = 'interface-name';
-        nameDiv.textContent = interfaceName;
-
-        const descDiv = document.createElement('div');
-        descDiv.className = 'interface-description';
-        descDiv.textContent = config.description || '(No description)';
-
-        const servicesDiv = document.createElement('div');
-        servicesDiv.className = 'service-instances';
-
-        if (!config.service_instance || config.service_instance.length === 0) {
-            servicesDiv.innerHTML = '<div class="service-instances-empty">No service instances</div>';
-        } else {
-            config.service_instance.forEach(instance => {
-                const instanceDiv = document.createElement('div');
-                instanceDiv.className = 'service-instance';
-
-                const idDiv = document.createElement('div');
-                idDiv.className = 'service-id';
-                idDiv.textContent = `Instance ID: ${instance.id}`;
-
-                const policyDiv = document.createElement('div');
-                policyDiv.className = 'service-policy';
-
-                if (!instance['service-policy'] || Object.keys(instance['service-policy']).length === 0) {
-                    policyDiv.innerHTML = '<div class="no-policy">No service policy</div>';
-                } else {
-                    const policy = instance['service-policy'];
-                    let policyHtml = '';
-                    if (policy.input) {
-                        policyHtml += `<div class="policy-item"><strong>Input:</strong> ${policy.input}</div>`;
-                    }
-                    if (policy.output) {
-                        policyHtml += `<div class="policy-item"><strong>Output:</strong> ${policy.output}</div>`;
-                    }
-                    policyDiv.innerHTML = policyHtml;
-                }
-
-                instanceDiv.appendChild(idDiv);
-                instanceDiv.appendChild(policyDiv);
-                servicesDiv.appendChild(instanceDiv);
-            });
-        }
-
-        card.appendChild(nameDiv);
-        card.appendChild(descDiv);
-        card.appendChild(servicesDiv);
+        const card = createInterfaceCard(interfaceName, config);
         interfaceContainer.appendChild(card);
     }
+}
+
+function createInterfaceCard(interfaceName, config) {
+    const card = document.createElement('div');
+    card.className = 'interface-card';
+
+    const nameDiv = document.createElement('div');
+    nameDiv.className = 'interface-name';
+    nameDiv.textContent = interfaceName;
+
+    const descDiv = document.createElement('div');
+    descDiv.className = 'interface-description';
+    descDiv.textContent = config.description || '(No description)';
+
+    const servicesDiv = document.createElement('div');
+    servicesDiv.className = 'service-instances';
+
+    if (!config.service_instance || config.service_instance.length === 0) {
+        servicesDiv.innerHTML = '<div class="service-instances-empty">No service instances</div>';
+    } else {
+        config.service_instance.forEach(instance => {
+            const instanceDiv = createInstanceCard(instance)
+            servicesDiv.appendChild(instanceDiv);
+        });
+    }
+
+    card.appendChild(nameDiv);
+    card.appendChild(descDiv);
+    card.appendChild(servicesDiv);
+    return card;
+}
+
+function createInstanceCard(instance) {
+    const instanceDiv = document.createElement('div');
+    instanceDiv.className = 'service-instance';
+
+    const idDiv = document.createElement('div');
+    idDiv.className = 'service-id';
+    idDiv.textContent = `Instance ID: ${instance.id}`;
+
+    const policyDiv = document.createElement('div');
+    policyDiv.className = 'service-policy';
+
+    if (!instance['service-policy'] || Object.keys(instance['service-policy']).length === 0) {
+        policyDiv.innerHTML = '<div class="no-policy">No service policy</div>';
+    } else {
+        const policy = instance['service-policy'];
+        let policyHtml = '';
+        if (policy.input) {
+            policyHtml += `<div class="policy-item"><strong>Input:</strong> ${policy.input}</div>`;
+        }
+        if (policy.output) {
+            policyHtml += `<div class="policy-item"><strong>Output:</strong> ${policy.output}</div>`;
+        }
+        policyDiv.innerHTML = policyHtml;
+    }
+
+    instanceDiv.appendChild(idDiv);
+    instanceDiv.appendChild(policyDiv);
+    return instanceDiv
 }
