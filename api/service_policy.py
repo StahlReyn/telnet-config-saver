@@ -42,34 +42,37 @@ SHOW_TIMEOUT = 20.0
 
 
 def get_service_policy(device):
+    print("Connecting...")
     net_connect = ConnectHandler(**device)
 
     if not net_connect.check_enable_mode():
         net_connect.enable()
 
+    print("Getting Output...")
     raw_output = net_connect.send_command(
         "show running-config | include interface|description|service instance|service-policy",
         read_timeout=SHOW_TIMEOUT,
         use_textfsm=True,
     )
 
+    print("Got Output:")
     output = {}
-    if raw_output is str:
-        output = parse_raw_output(raw_output.split("\n"))
-    else:
+    if type(raw_output) is str:
         output = parse_raw_output(raw_output)
+    else:
+        print("Error: Non String Raw Output")
 
     net_connect.disconnect()
     return output
 
-def parse_raw_output(lines):
+def parse_raw_output(raw_output:str):
+    lines = raw_output.split("\n")
     cur_interface = {}
     cur_service_instance = {}
     output = {}
-    for line in lines: # type: ignore
+    for line in lines:
         line = line.strip()
         tokens = line.split(" ")
-
         match tokens[0]:
             case "interface":
                 cur_interface = {
@@ -78,27 +81,23 @@ def parse_raw_output(lines):
                 }
                 output[tokens[1]] = cur_interface
                 cur_service_instance = None
-                break
             case "service": # service instance gets split to 2
                 cur_service_instance = {
                     'id': int(tokens[2]),
                     'service-policy': {}
                 }
                 cur_interface['service_instance'].append(cur_service_instance)
-                break
             case "service-policy":
                 if cur_service_instance is None:
                     print("No service instance before service-policy")
-                    break
-                cur_service_instance['service-policy'][tokens[1]] = tokens[2]
-                break
+                else:
+                    cur_service_instance['service-policy'][tokens[1]] = tokens[2]
             case "description":
                 desc = line.split(" ", 1)[1] # Description may contain space, only separate first
                 if cur_service_instance is not None:
                     cur_service_instance["description"] = desc
                 else:
                     cur_interface["description"] = desc
-                break
     return output
 
 def main():
