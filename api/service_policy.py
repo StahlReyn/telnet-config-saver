@@ -44,25 +44,27 @@ SHOW_TIMEOUT = 20.0
 def get_service_policy(device):
     print("Connecting...")
     net_connect = ConnectHandler(**device)
+    output = command_service_policy(net_connect)
+    net_connect.disconnect()
+    return output
 
+def command_service_policy(net_connect):
     if not net_connect.check_enable_mode():
         net_connect.enable()
 
-    print("Getting Output...")
+    print("Getting Config...")
     raw_output = net_connect.send_command(
         "show running-config | include interface|description|service instance|service-policy",
         read_timeout=SHOW_TIMEOUT,
         use_textfsm=True,
     )
 
-    print("Got Output:")
+    print("Got Config:")
     output = {}
     if type(raw_output) is str:
         output = parse_raw_output(raw_output)
     else:
         print("Error: Non String Raw Output")
-
-    net_connect.disconnect()
     return output
 
 def parse_raw_output(raw_output:str):
@@ -126,9 +128,14 @@ def set_service_policy_bandwidth(device, service_policy):
     commands.append(f"service-policy input police-{bandwidth}")
     commands.append(f"service-policy output shape-{bandwidth}")
 
-    print(commands)
+    # Send Command
     net_connect.send_config_set(commands)
+
+    # Grab Config again to be sure
+    output = command_service_policy(net_connect)
+
     net_connect.disconnect()
+    return output
 
 def get_current_policy(net_connect, interface, service_instance_id):
     current_policy_lines = []

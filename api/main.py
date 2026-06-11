@@ -42,9 +42,10 @@ def read_item(device: DeviceConfig):
 @app.post("/config/service-policy-bandwidth")
 def config_service_policy_bandwidth(device: DeviceConfig, service_policy: ServicePolicyConfig):
     try:
-        set_service_policy_bandwidth(
+        output = set_service_policy_bandwidth(
             device.model_dump(), 
             service_policy.model_dump()
         )
+        return output
     except Exception as e:
         return {"error": str(e)}

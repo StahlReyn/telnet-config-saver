@@ -6,7 +6,7 @@ const rawResponse = document.getElementById('rawResponse');
 const filterResultsDiv = document.getElementById('interfaceFilterStatus');
 const hideNoServicePolicyCheckbox = document.getElementById('hideNoServicePolicy')
 
-const SERVER_URL = "http://127.0.0.1:8000/interfaces"
+const SERVER_URL = "http://127.0.0.1:8000"
 
 let current_device = {}
 let current_data = {}
@@ -32,10 +32,10 @@ function getDeviceFormData() {
     };
 }
 
-async function postWithStatus(formData, successCallback) {
+async function postWithStatus(url, formData, successCallback) {
     showStatus('loading', 'Processing Request...');
     try {
-        const response = await fetch(SERVER_URL, {
+        const response = await fetch(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -66,7 +66,7 @@ async function getDeviceConfig(event) {
     current_device = getDeviceFormData()
     resultsDiv.classList.remove('show');
     
-    await postWithStatus(current_device, (data) => {
+    await postWithStatus(SERVER_URL + "/interfaces", current_device, (data) => {
         current_data = data
         refreshDisplayResults()
     })
@@ -187,7 +187,10 @@ function createBandwidthButton(interfaceName, instanceId, bandwidth) {
     }
 
     bandwidthButton.addEventListener('click', async (e) => {
-        await postWithStatus(formData)
+        await postWithStatus(SERVER_URL + "/config/service-policy-bandwidth", formData, (data) => {
+            current_data = data
+            refreshDisplayResults()
+        })
     })
 
     return bandwidthButton
