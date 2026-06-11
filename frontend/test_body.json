@@ -1,0 +1,8 @@
+{
+    "device_type": "cisco_ios_telnet",
+    "host": "172.19.20.218",
+    "username": "cisco",
+    "password": "cisco",
+    "secret": "cisco",
+    "port": 30001
+}

@@ -1,23 +1,35 @@
 from api.service_policy import get_service_policy
 from fastapi import FastAPI # type: ignore
+from pydantic import BaseModel # type: ignore
+from fastapi.middleware.cors import CORSMiddleware # type: ignore
 
 app = FastAPI()
 
-TEST_DEVICE = {
-    'device_type': 'cisco_ios_telnet',
-    'host': '172.19.20.218',
-    'username': 'cisco',
-    'password': 'cisco',
-    'secret': 'cisco', # Cisco enable mode
-    'port': 30001,
-}
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],            
+    allow_credentials=False,          
+    allow_methods=["*"],              # Allows all standard HTTP methods (GET, POST, etc.)
+    allow_headers=["*"],              # Allows all headers
+)
+
+class DeviceConfig(BaseModel):
+    device_type: str
+    host: str
+    username: str
+    password: str
+    secret: str
+    port: int
 
 @app.get("/")
 def read_root():
     return {"Hello": "World"}
 
 
-@app.get("/interfaces")
-def read_item():
-    output = get_service_policy(TEST_DEVICE)
-    return output
+@app.post("/interfaces")
+def read_item(device: DeviceConfig):
+    try:
+        output = get_service_policy(device.model_dump())
+        return output
+    except Exception as e:
+        return {"error": str(e)}
