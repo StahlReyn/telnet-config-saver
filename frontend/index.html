@@ -37,15 +37,15 @@
                     </div>
                     <div class="form-group">
                         <label for="username">Username</label>
-                        <input type="text" id="username" name="username" placeholder="e.g., cisco" required>
+                        <input type="text" id="username" name="username" placeholder="e.g., cisco">
                     </div>
                     <div class="form-group">
                         <label for="password">Password</label>
-                        <input type="password" id="password" name="password" placeholder="e.g., cisco" required>
+                        <input type="password" id="password" name="password" placeholder="e.g., cisco">
                     </div>
                     <div class="form-group">
                         <label for="secret">Secret</label>
-                        <input type="password" id="secret" name="secret" placeholder="Enable secret (if required)" required>
+                        <input type="password" id="secret" name="secret" placeholder="Enable secret (if required)">
                     </div>
                 </div>
 
@@ -61,6 +61,11 @@
         <div id="results" class="results">
             <div class="form-card">
                 <h2 style="margin-bottom: 20px; color: #333;">Interface Configurations</h2>
+                <div id="interfaceFilters">
+                    <label for="hideNoServicePolicy">Hide No Service-Policy Interfaces:</label>
+                    <input type="checkbox" id="hideNoServicePolicy" name="hideNoServicePolicy" checked>
+                </div>
+                <small id="interfaceFilterStatus">Result</small>
                 <div id="interfaceContainer" class="interface-grid"></div>
             </div>
 

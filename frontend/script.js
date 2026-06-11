@@ -3,11 +3,15 @@ const statusDiv = document.getElementById('status');
 const resultsDiv = document.getElementById('results');
 const interfaceContainer = document.getElementById('interfaceContainer');
 const rawResponse = document.getElementById('rawResponse');
+const filterResultsDiv = document.getElementById('interfaceFilterStatus');
+const hideNoServicePolicyCheckbox = document.getElementById('hideNoServicePolicy')
 
 const SERVER_URL = "http://127.0.0.1:8000/interfaces"
 
-form.addEventListener('submit', async (e) => {
-    e.preventDefault();
+let current_data = {}
+
+async function getDeviceConfig(event) {
+    event.preventDefault();
 
     const formData = {
         device_type: document.getElementById('deviceType').value,
@@ -40,16 +44,22 @@ form.addEventListener('submit', async (e) => {
             showStatus('error', `Error: ${data.error}`);
         } else {
             showStatus('success', 'Configuration retrieved successfully!');
-            displayResults(data);
+            current_data = data;
+            refreshDisplayResults();
         }
     } catch (error) {
         showStatus('error', `Failed to fetch configuration: ${error.message}`);
     }
-});
+}
 
 function showStatus(type, message) {
     statusDiv.textContent = message;
     statusDiv.className = `status ${type}`;
+}
+
+function refreshDisplayResults() {
+    console.log("Refresh Display")
+    displayResults(current_data);
 }
 
 function displayResults(data) {
@@ -57,11 +67,21 @@ function displayResults(data) {
     rawResponse.textContent = JSON.stringify(data, null, 2);
     resultsDiv.classList.add('show');
 
+    let hideNoServicePolicy = hideNoServicePolicyCheckbox.checked
+
+    let total_count = 0;
+    let shown_count = 0;
     for (const [interfaceName, config] of Object.entries(data)) {
         if (typeof config !== 'object') continue;
+        total_count += 1;
+        // Skip no service policy
+        if (hideNoServicePolicy && (!config.service_instance || config.service_instance.length === 0)) continue;
         const card = createInterfaceCard(interfaceName, config);
         interfaceContainer.appendChild(card);
+        shown_count += 1;
     }
+
+    filterResultsDiv.textContent = `Showing ${shown_count}/${total_count} interfaces`
 }
 
 function createInterfaceCard(interfaceName, config) {
@@ -123,3 +143,6 @@ function createInstanceCard(instance) {
     instanceDiv.appendChild(policyDiv);
     return instanceDiv
 }
+
+form.addEventListener('submit', getDeviceConfig);
+hideNoServicePolicyCheckbox.addEventListener('change', refreshDisplayResults)
