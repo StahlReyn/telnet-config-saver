@@ -100,6 +100,53 @@ def parse_raw_output(raw_output:str):
                     cur_interface["description"] = desc
     return output
 
+def set_service_policy_bandwidth(device, service_policy):
+    interface: str = service_policy["interface"]
+    service_instance_id: int = service_policy["service_instance_id"]
+    bandwidth: str = service_policy["bandwidth"]
+
+    print("Connecting...")
+    net_connect = ConnectHandler(**device)
+
+    if not net_connect.check_enable_mode():
+        net_connect.enable()
+    
+    print("Find Current Config")
+    current_policy_lines = get_current_policy(net_connect, interface, service_instance_id)
+    
+    print("Sending Config...")
+    commands = [
+        f"interface {interface}",
+        f"service instance {service_instance_id} ethernet",
+    ]
+
+    for line in current_policy_lines:
+        commands.append(f"no {line}")
+    
+    commands.append(f"service-policy input police-{bandwidth}")
+    commands.append(f"service-policy output shape-{bandwidth}")
+
+    print(commands)
+    net_connect.send_config_set(commands)
+    net_connect.disconnect()
+
+def get_current_policy(net_connect, interface, service_instance_id):
+    current_policy_lines = []
+    show_command = f"show running-config interface {interface} | section service instance {service_instance_id} ethernet"
+    print(show_command)
+    raw_output = net_connect.send_command(
+        show_command,
+        read_timeout=SHOW_TIMEOUT
+    )
+
+    print(raw_output)
+    raw_output_lines = raw_output.split("\n")
+    for line in raw_output_lines:
+        line = line.strip()
+        if line.startswith("service-policy"):
+            current_policy_lines.append(line)
+    return current_policy_lines
+
 def main():
     output = get_service_policy(TEST_DEVICE)
     print(output)
