@@ -90,11 +90,7 @@ def parse_raw_output(raw_output:str):
                 }
                 cur_interface['service_instance'].append(cur_service_instance)
             case "service-policy":
-                if cur_interface is None:
-                    print("No interface before service-policy")
-                elif cur_service_instance is None:
-                    print("No service instance before service-policy")
-                else:
+                if not (cur_interface is None or cur_service_instance is None):
                     cur_service_instance['service-policy'][tokens[1]] = tokens[2]
             case "description":
                 desc = line.split(" ", 1)[1] # Description may contain space, only separate first
@@ -104,42 +100,33 @@ def parse_raw_output(raw_output:str):
                     cur_interface["description"] = desc
     return output
 
-def set_service_policy_bandwidth(device, service_policy):
-    interface: str = service_policy["interface"]
-    service_instance_id: int = service_policy["service_instance_id"]
-    bandwidth: str = service_policy["bandwidth"]
-
+def set_service_policy(device, interface, service_instance_id, policies):
+    """Sets service policy"""
     print("Connecting...")
     net_connect = ConnectHandler(**device)
-
     if not net_connect.check_enable_mode():
         net_connect.enable()
     
     print("Find Current Config")
     current_policy_lines = get_current_policy(net_connect, interface, service_instance_id)
-    
+
     print("Sending Config...")
     commands = [
         f"interface {interface}",
         f"service instance {service_instance_id} ethernet",
     ]
+    for policy_type, policy_name in policies.items():
+        for line in current_policy_lines:
+            if line.startswith(f"service-policy {policy_type}"):
+                commands.append(f"no {line}")
+        commands.append(f"service-policy {policy_type} {policy_name}")
 
-    for line in current_policy_lines:
-        commands.append(f"no {line}")
-    
-    commands.append(f"service-policy input police-{bandwidth}")
-    commands.append(f"service-policy output shape-{bandwidth}")
-
-    # Send Command
     net_connect.send_config_set(commands)
-
-    # Grab Config again to be sure
-    output = command_service_policy(net_connect)
-
+    output = command_service_policy(net_connect) # Grab Config again to be sure
     net_connect.disconnect()
     return output
 
-def get_current_policy(net_connect, interface, service_instance_id):
+def get_current_policy(net_connect, interface, service_instance_id) -> list[str]:
     current_policy_lines = []
     show_command = f"show running-config interface {interface} | section service instance {service_instance_id} ethernet"
     print(show_command)

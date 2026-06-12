@@ -31,7 +31,7 @@
     --color-bg-element: light-dark(#f0f0f0, #334155);
     
     --color-text-main: light-dark(var(--p-neutral-800), var(--p-neutral-100));
-    --color-text-muted: light-dark(var(--p-neutral-600), #94a3b8);
+    --color-text-muted: light-dark(var(--p-neutral-600), #a9b9cf);
     --color-text-empty: light-dark(#999999, #64748b);
     --color-text-on-brand: var(--p-neutral-0);
 

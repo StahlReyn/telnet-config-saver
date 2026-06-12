@@ -176,13 +176,24 @@ function createInstanceCard(interfaceName, instance) {
     }
     policyDiv.innerHTML = policyHtml;
 
-    const bandwidthInput = createBandwidthInput(interfaceName, instance.id)
-
     instanceDiv.appendChild(idDiv);
     instanceDiv.appendChild(descDiv);
     instanceDiv.appendChild(policyDiv);
-    instanceDiv.appendChild(bandwidthInput);
+    
     return instanceDiv
+}
+
+function createPolicyDiv(label, value) {
+    const card = document.createElement('div');
+    card.className = 'policy-item';
+
+    const labelDiv = document.createElement('div');
+    card.textContent = label;
+
+    const policyInput = document.createElement('input');
+    policyInput.value = value;
+    
+    policyInput.a
 }
 
 function setupBandwidthDataList() {
@@ -229,7 +240,7 @@ function createBandwidthInput(interfaceName, instanceId) {
         const currentPayload = getFormData(); 
         
         await postWithStatus(
-            SERVER_URL + "/config/service-policy-bandwidth", 
+            SERVER_URL + "/config/service-policy/bandwidth", 
             currentPayload, 
             (data) => {
                 current_data = data;
