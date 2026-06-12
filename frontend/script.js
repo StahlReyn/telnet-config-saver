@@ -144,7 +144,8 @@ function createInstanceCard(interfaceName, instance) {
     idDiv.className = 'service-id';
     idDiv.textContent = `${instance.id}`;
 
-    display_desc = instance.description.replace(/^[\$\*\!\= ]+|[\$\*\!\= ]+$/g, '');
+    display_desc = instance.description || "";
+    display_desc = display_desc.replace(/^[\$\*\!\= ]+|[\$\*\!\= ]+$/g, '');
     const descDiv = document.createElement('div');
     descDiv.className = 'service-desc fade-text-horizontal';
     descDiv.textContent = `${display_desc}`;
