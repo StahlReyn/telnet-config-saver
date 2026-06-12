@@ -11,7 +11,26 @@ const SERVER_URL = "http://192.168.194.1:8000"
 let current_device = {}
 let current_data = {}
 
-let template_bandwidth_list = [
+// Input Output ay be different to each other. Change Later
+let dataListInput = [
+    "police-10M",
+    "police-20M",
+    "police-50M",
+    "police-100M",
+    "police-200M",
+    "police-300M",
+]
+
+let dataListOutput = [
+    "shape-10M",
+    "shape-20M",
+    "shape-50M",
+    "shape-100M",
+    "shape-200M",
+    "shape-300M",
+]
+
+let dataListBandwidth = [
     "10M",
     "20M",
     "50M",
@@ -89,7 +108,9 @@ function displayResults(data) {
     rawResponse.textContent = JSON.stringify(data, null, 2);
     resultsDiv.classList.add('show');
 
-    setupBandwidthDataList()
+    setupDataList("datalist-input", dataListInput)
+    setupDataList("datalist-output", dataListOutput)
+    setupDataList("datalist-bandwidth", dataListBandwidth)
 
     let hideNoServicePolicy = hideNoServicePolicyCheckbox.checked
 
@@ -159,22 +180,11 @@ function createInstanceCard(interfaceName, instance) {
     descDiv.className = 'service-desc fade-text-horizontal';
     descDiv.textContent = `${display_desc}`;
 
+    const policy = instance['service-policy'];
     const policyDiv = document.createElement('div');
     policyDiv.className = 'service-policy';
-
-    const policy = instance['service-policy'];
-    let policyHtml = '';
-    if (policy && policy.input) {
-        policyHtml += `<div class="policy-item"><strong>Upload:</strong> ${policy.input}</div>`;
-    } else {
-        policyHtml += '<div class="no-policy">No upload policy</div>'
-    }
-    if (policy && policy.output) {
-        policyHtml += `<div class="policy-item"><strong>Download:</strong> ${policy.output}</div>`;
-    } else {
-        policyHtml += '<div class="no-policy">No download policy</div>'
-    }
-    policyDiv.innerHTML = policyHtml;
+    policyDiv.appendChild(createPolicyDiv("input", "Upload:", policy?.input ?? "", "datalist-input", interfaceName, instance.id));
+    policyDiv.appendChild(createPolicyDiv("output", "Download:", policy?.output ?? "", "datalist-output", interfaceName, instance.id));
 
     instanceDiv.appendChild(idDiv);
     instanceDiv.appendChild(descDiv);
@@ -183,27 +193,65 @@ function createInstanceCard(interfaceName, instance) {
     return instanceDiv
 }
 
-function createPolicyDiv(label, value) {
+// Policy display also count as input hooked to input or output
+// TO DO: REFACTOR LATER
+function createPolicyDiv(type, label, value, datalist, interfaceName, instance_id) {
     const card = document.createElement('div');
     card.className = 'policy-item';
 
     const labelDiv = document.createElement('div');
-    card.textContent = label;
+    labelDiv.textContent = label;
+    labelDiv.className = 'policy-item-label';
 
     const policyInput = document.createElement('input');
+    policyInput.className = 'policy-item-input';
+    policyInput.type = 'text'
     policyInput.value = value;
+    policyInput.setAttribute('list', datalist); 
+    policyInput.onclick = (e) => {
+        e.target.placeholder = e.target.value;
+        e.target.value = "";
+        e.target.showPicker();
+    };
+    policyInput.oncancel = (e) => {e.target.value = e.target.placeholder;}
+    policyInput.onblur = (e) => {e.target.value = e.target.placeholder;}
+    policyInput.onkeydown = async (e) => {
+        if (e.key !== "Enter") return;
+        const currentPayload = {
+            "device": current_device,
+            "policy": {
+                "interface": interfaceName,
+                "service_instance_id": instance_id,
+                "policy_name": e.target.value
+            }
+        };
+        console.log("Sending:", currentPayload);
+        await postWithStatus(
+            SERVER_URL + "/config/service-policy/" + type, 
+            currentPayload, 
+            (data) => {
+                current_data = data;
+                refreshDisplayResults();
+            }
+        );
+    };
     
-    policyInput.a
+    card.appendChild(labelDiv);
+    card.appendChild(policyInput);
+    return card;
 }
 
-function setupBandwidthDataList() {
+function setupDataList(id, list) {
     const dataList = document.createElement('datalist');
-    dataList.id = "bandwidth-list";
-    for (const bandwidth of template_bandwidth_list) {
-        dataList.innerHTML += `<option value="${bandwidth}">`
+    dataList.id = id;
+    for (const value of list) {
+        dataList.innerHTML += `<option value="${value}">`
     }
     interfaceContainer.appendChild(dataList)
 }
+
+
+// ==== OLD ====
 
 function createBandwidthInput(interfaceName, instanceId) {
     const bandwidthContainer = document.createElement('div')

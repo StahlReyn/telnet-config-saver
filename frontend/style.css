@@ -192,7 +192,7 @@ details[open] > .interface-header {
     padding: 4px;
     flex-grow: 1;
     flex-basis: 0;
-    min-width: 24em;
+    min-width: 16em;
 }
 
 .service-policy {
@@ -201,22 +201,36 @@ details[open] > .interface-header {
     display: flex;
     flex-wrap: wrap;
     gap: 5px;
-    min-width: 24em;
+    min-width: 16em;
 }
 
-.policy-item, .no-policy {
+.policy-item {
     color: var(--color-text-muted);
     margin: auto;
-    padding: 8px;
+    padding: 4px;
     background: var(--color-bg-card);
     border-radius: 3px;
     border-left: 3px solid var(--p-green-700);
+
     flex-grow: 1;
     flex-basis: 0;
+    display: flex;
+    gap: 6px
 }
 
 .policy-item:nth-child(1) {
     border-color: var(--p-red-700);
+}
+
+.policy-item-label {
+    margin: auto;
+    font-weight: bold;
+}
+
+.policy-item-input {
+    min-width: 6em;
+    padding: 4px;
+    flex-grow: 1;
 }
 
 .no-policy {
@@ -254,6 +268,10 @@ details[open] > .interface-header {
 .policy-item:active {
     color: var(--color-brand);
     transform: translateY(1px);
+}
+
+.service-instance:hover {
+    background: var(--color-bg-element);
 }
 
 /* --- Response Payloads --- */
