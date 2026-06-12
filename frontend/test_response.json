@@ -1,0 +1,28 @@
+{
+  "Loopback0": { "description": "", "service_instance": [] },
+  "GigabitEthernet1": { "description": "", "service_instance": [] },
+  "GigabitEthernet2": { "description": "", "service_instance": [] },
+  "GigabitEthernet3": {
+    "description": "*** VPN1234 MTS ***",
+    "service_instance": [
+      {
+        "id": 1,
+        "service-policy": { "input": "police-20M", "output": "shape-20M" },
+        "description": "*** VPN1234 MTS ***"
+      },
+      { "id": 2, "service-policy": {}, "description": "*** VPN1234 MTS ***" }
+    ]
+  },
+  "GigabitEthernet4": {
+    "description": "*** VPN4321 STS ***",
+    "service_instance": [
+      {
+        "id": 1,
+        "service-policy": { "input": "police-10M", "output": "shape-10M" },
+        "description": "*** VPN4321 STS ***"
+      },
+      { "id": 2, "service-policy": {}, "description": "*** VPN4321 STS ***" }
+    ]
+  },
+  "BDI100": { "description": "", "service_instance": [] }
+}
