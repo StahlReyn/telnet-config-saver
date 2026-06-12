@@ -66,6 +66,7 @@
     width: 100vw;
     box-shadow: 0 0 10px var(--shadow-alpha-heavy);
     background-color: var(--color-bg-card);
+    z-index: 100;
 }
 
 .status.loading {
@@ -99,22 +100,58 @@
     display: flex;
     flex-flow: column;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 20px;
+    gap: 10px;
     margin-top: 20px;
 }
 
 .interface-card {
     background: var(--color-bg-card);
     border-radius: 5px;
-    padding: 15px;
+    padding: 0 12px;
     box-shadow: 0 2px 5px var(--shadow-alpha-main);
     border-left: 4px solid var(--color-brand);
 }
 
-.interface-name-container {
+.interface-header {
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
+    padding: 8px 0;
+    gap: 8px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: var(--color-bg-card);
+}
+
+details[open] > .interface-header {
+    margin-bottom: 5px;
+    border-bottom: 2px solid var(--color-border-divider);
+}
+/* Create the invisible expanded hit target */
+.interface-header::after {
+    content: '';
+    position: absolute;
+    /* Expand the click zone by 10px in all directions */
+    top: -10px;
+    right: -10px;
+    bottom: -10px;
+    left: -10px;
+    /* Alternative modern property: inset: -10px; */
+}
+
+.interface-header > * {
+    transition: transform 0.2s, color 0.2s;
+}
+
+.interface-header:hover > * {
+    color: var(--color-brand-hover);
+    transform: translateY(-2px);
+}
+
+.interface-header:active > * {
+    color: var(--color-brand);
+    transform: translateY(2px);
 }
 
 .interface-name {
@@ -130,12 +167,10 @@
 }
 
 .service-instances {
-    margin-top: 5px;
-    padding-top: 5px;
-    border-top: 1px solid var(--color-border-divider);
     display: flex;
     flex-flow: column;
     gap: 4px;
+    padding-bottom: 8px;
 }
 
 .service-instances-empty {

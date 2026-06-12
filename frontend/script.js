@@ -109,16 +109,25 @@ function displayResults(data) {
 }
 
 function createInterfaceCard(interfaceName, config) {
-    const card = document.createElement('div');
+    const card = document.createElement('details');
     card.className = 'interface-card';
 
-    const nameDescDiv = document.createElement('div');
-    nameDescDiv.className = 'interface-name-container';
-    nameDescDiv.innerHTML = (`
-        <div class="interface-name">${interfaceName}</div>
-        <div class="interface-description">${config.description || '(No description)'}</div>
-    `)
+    // Header Div
+    const interfaceHeaderDiv = document.createElement('summary');
+    interfaceHeaderDiv.className = 'interface-header';
 
+    const interfaceNameDiv = document.createElement('div');
+    interfaceNameDiv.className = "interface-name";
+    interfaceNameDiv.textContent = interfaceName;
+
+    const interfaceDescDiv = document.createElement('div');
+    interfaceDescDiv.className = "interface-description";
+    interfaceDescDiv.textContent = config.description || "(No description)";
+
+    interfaceHeaderDiv.appendChild(interfaceNameDiv);
+    interfaceHeaderDiv.appendChild(interfaceDescDiv);
+
+    // Service Div
     const servicesDiv = document.createElement('div');
     servicesDiv.className = 'service-instances';
 
@@ -131,7 +140,7 @@ function createInterfaceCard(interfaceName, config) {
         });
     }
 
-    card.appendChild(nameDescDiv);
+    card.appendChild(interfaceHeaderDiv);
     card.appendChild(servicesDiv);
     return card;
 }
@@ -144,7 +153,7 @@ function createInstanceCard(interfaceName, instance) {
     idDiv.className = 'service-id';
     idDiv.textContent = `${instance.id}`;
 
-    display_desc = instance.description || "";
+    display_desc = instance.description || '(No description)';
     display_desc = display_desc.replace(/^[\$\*\!\= ]+|[\$\*\!\= ]+$/g, '');
     const descDiv = document.createElement('div');
     descDiv.className = 'service-desc fade-text-horizontal';
@@ -153,23 +162,19 @@ function createInstanceCard(interfaceName, instance) {
     const policyDiv = document.createElement('div');
     policyDiv.className = 'service-policy';
 
-    if (!instance['service-policy'] || Object.keys(instance['service-policy']).length === 0) {
-        policyDiv.innerHTML = '<div class="no-policy">No service policy</div>';
+    const policy = instance['service-policy'];
+    let policyHtml = '';
+    if (policy && policy.input) {
+        policyHtml += `<div class="policy-item"><strong>Upload:</strong> ${policy.input}</div>`;
     } else {
-        const policy = instance['service-policy'];
-        let policyHtml = '';
-        if (policy.input) {
-            policyHtml += `<div class="policy-item"><strong>Upload:</strong> ${policy.input}</div>`;
-        } else {
-            policyHtml += '<div class="no-policy">No upload policy</div>'
-        }
-        if (policy.output) {
-            policyHtml += `<div class="policy-item"><strong>Download:</strong> ${policy.output}</div>`;
-        } else {
-            policyHtml += '<div class="no-policy">No download policy</div>'
-        }
-        policyDiv.innerHTML = policyHtml;
+        policyHtml += '<div class="no-policy">No upload policy</div>'
     }
+    if (policy && policy.output) {
+        policyHtml += `<div class="policy-item"><strong>Download:</strong> ${policy.output}</div>`;
+    } else {
+        policyHtml += '<div class="no-policy">No download policy</div>'
+    }
+    policyDiv.innerHTML = policyHtml;
 
     const bandwidthInput = createBandwidthInput(interfaceName, instance.id)
 

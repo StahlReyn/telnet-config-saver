@@ -61,6 +61,11 @@
     box-sizing: border-box;
 }
 
+/* Global rule: Tell the browser it is allowed to animate to "auto" height */
+html {
+    interpolate-size: allow-keywords;
+}
+
 body {
     font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
     min-height: 100vh;
