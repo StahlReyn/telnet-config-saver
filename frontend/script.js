@@ -6,7 +6,7 @@ const rawResponse = document.getElementById('rawResponse');
 const filterResultsDiv = document.getElementById('interfaceFilterStatus');
 const hideNoServicePolicyCheckbox = document.getElementById('hideNoServicePolicy')
 
-const SERVER_URL = "http://127.0.0.1:8000"
+const SERVER_URL = "http://192.168.194.1:8000"
 
 let current_device = {}
 let current_data = {}
@@ -89,6 +89,8 @@ function displayResults(data) {
     rawResponse.textContent = JSON.stringify(data, null, 2);
     resultsDiv.classList.add('show');
 
+    setupBandwidthDataList()
+
     let hideNoServicePolicy = hideNoServicePolicyCheckbox.checked
 
     let total_count = 0;
@@ -142,6 +144,11 @@ function createInstanceCard(interfaceName, instance) {
     idDiv.className = 'service-id';
     idDiv.textContent = `${instance.id}`;
 
+    display_desc = instance.description.replace(/^[\$\*\!\= ]+|[\$\*\!\= ]+$/g, '');
+    const descDiv = document.createElement('div');
+    descDiv.className = 'service-desc fade-text-horizontal';
+    descDiv.textContent = `${display_desc}`;
+
     const policyDiv = document.createElement('div');
     policyDiv.className = 'service-policy';
 
@@ -151,49 +158,81 @@ function createInstanceCard(interfaceName, instance) {
         const policy = instance['service-policy'];
         let policyHtml = '';
         if (policy.input) {
-            policyHtml += `<div class="policy-item"><strong>Input:</strong> ${policy.input}</div>`;
+            policyHtml += `<div class="policy-item"><strong>Upload:</strong> ${policy.input}</div>`;
+        } else {
+            policyHtml += '<div class="no-policy">No upload policy</div>'
         }
         if (policy.output) {
-            policyHtml += `<div class="policy-item"><strong>Output:</strong> ${policy.output}</div>`;
+            policyHtml += `<div class="policy-item"><strong>Download:</strong> ${policy.output}</div>`;
+        } else {
+            policyHtml += '<div class="no-policy">No download policy</div>'
         }
         policyDiv.innerHTML = policyHtml;
     }
 
-    const bandwithButtonsContainer = document.createElement('div');
-    bandwithButtonsContainer.className = 'bandwith-buttons-container';
-    for (const bandwidth of template_bandwidth_list) {
-        const bandwidthButton = createBandwidthButton(interfaceName, instance.id, bandwidth)
-        bandwithButtonsContainer.appendChild(bandwidthButton);
-    }
+    const bandwidthInput = createBandwidthInput(interfaceName, instance.id)
 
     instanceDiv.appendChild(idDiv);
+    instanceDiv.appendChild(descDiv);
     instanceDiv.appendChild(policyDiv);
-    instanceDiv.appendChild(bandwithButtonsContainer);
+    instanceDiv.appendChild(bandwidthInput);
     return instanceDiv
 }
 
-function createBandwidthButton(interfaceName, instanceId, bandwidth) {
-    const bandwidthButton = document.createElement('button');
-    bandwidthButton.className = 'bandwidth-button';
-    bandwidthButton.textContent = bandwidth
+function setupBandwidthDataList() {
+    const dataList = document.createElement('datalist');
+    dataList.id = "bandwidth-list";
+    for (const bandwidth of template_bandwidth_list) {
+        dataList.innerHTML += `<option value="${bandwidth}">`
+    }
+    interfaceContainer.appendChild(dataList)
+}
 
-    const formData = {
-        "device": current_device,
-        "service_policy": {
-            "interface": interfaceName,
-            "service_instance_id": instanceId,
-            "bandwidth": bandwidth
-        }
+function createBandwidthInput(interfaceName, instanceId) {
+    const bandwidthContainer = document.createElement('div')
+    bandwidthContainer.className = 'bandwith-buttons-container';
+    bandwidthContainer.innerHTML = `
+        <input 
+            type="text" 
+            id="bandwidth-choice" 
+            name="bandwidth" 
+            placeholder="Enter Bandwidth" 
+            list="bandwidth-list"
+            onclick="this.showPicker()"
+        >
+    `
+
+    // Target the actual input element inside the container
+    const realInput = bandwidthContainer.querySelector('input');
+
+    function getFormData() {
+        return {
+            "device": current_device,
+            "service_policy": {
+                "interface": interfaceName,
+                "service_instance_id": instanceId,
+                "bandwidth": realInput.value
+            }
+        };
     }
 
-    bandwidthButton.addEventListener('click', async (e) => {
-        await postWithStatus(SERVER_URL + "/config/service-policy-bandwidth", formData, (data) => {
-            current_data = data
-            refreshDisplayResults()
-        })
-    })
+    bandwidthContainer.addEventListener("keydown", async (e) => {
+        if (e.key !== "Enter") return;
+        
+        // getFormData() evaluates NOW and captures the exact text currently in the input field
+        const currentPayload = getFormData(); 
+        
+        await postWithStatus(
+            SERVER_URL + "/config/service-policy-bandwidth", 
+            currentPayload, 
+            (data) => {
+                current_data = data;
+                refreshDisplayResults();
+            }
+        );
+    });
 
-    return bandwidthButton
+    return bandwidthContainer
 }
 
 form.addEventListener('submit', getDeviceConfig);

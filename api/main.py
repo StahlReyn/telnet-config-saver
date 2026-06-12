@@ -4,7 +4,7 @@ from pydantic import BaseModel # type: ignore
 from fastapi.middleware.cors import CORSMiddleware # type: ignore
 
 app = FastAPI()
-
+# py -m fastapi run api/main.py --host 192.168.194.1 --port 8000
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],            

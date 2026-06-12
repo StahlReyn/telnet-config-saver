@@ -12,7 +12,7 @@ TEST_DEVICE = {
     'username': 'cisco',
     'password': 'cisco',
     'secret': 'cisco', # Cisco enable mode
-    'port': 30001,
+    'port': 30006,
 }
 
 SHOW_TIMEOUT = 20.0
@@ -69,8 +69,8 @@ def command_service_policy(net_connect):
 
 def parse_raw_output(raw_output:str):
     lines = raw_output.split("\n")
-    cur_interface = {}
-    cur_service_instance = {}
+    cur_interface = None
+    cur_service_instance = None
     output = {}
     for line in lines:
         line = line.strip()
@@ -90,7 +90,9 @@ def parse_raw_output(raw_output:str):
                 }
                 cur_interface['service_instance'].append(cur_service_instance)
             case "service-policy":
-                if cur_service_instance is None:
+                if cur_interface is None:
+                    print("No interface before service-policy")
+                elif cur_service_instance is None:
                     print("No service instance before service-policy")
                 else:
                     cur_service_instance['service-policy'][tokens[1]] = tokens[2]
