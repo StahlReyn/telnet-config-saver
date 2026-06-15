@@ -69,7 +69,6 @@ html {
 body {
     font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
     min-height: 100vh;
-    padding: 20px;
     background-color: var(--color-bg-body);
     color: var(--color-text-main);
 }
@@ -80,7 +79,9 @@ h1 {
 }
 
 h2 {
-    margin-bottom: 20px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    border-bottom: var(--color-bg-element) solid 2px;
     color: var(--color-text-main);
 }
 

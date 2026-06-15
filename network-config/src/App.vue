@@ -1,78 +1,109 @@
 <script setup lang="ts">
-import { ref, reactive, computed } from 'vue';
-import DeviceForm, { type DeviceFormFields } from './components/DeviceForm.vue';
-import InterfaceCard from './components/InterfaceCard.vue';
+import { ref, reactive, computed } from 'vue'
+import DeviceForm, { type DeviceFormFields } from './components/DeviceForm.vue'
+import InterfaceCard from './components/InterfaceCard.vue'
 
-const SERVER_URL = "http://192.168.194.1:8000";
-const TEST_RESPONSE = true;
-const TEST_JSON = "data/test_response.json";
+const SERVER_URL = 'http://192.168.194.1:8000'
+const TEST_RESPONSE = true
+const TEST_JSON = 'data/test_response.json'
+
+interface NetworkInterface {
+  description: string
+  service_instance: ServiceInstance[]
+}
+
+interface ServiceInstance {
+  id: number
+  service_policy: ServicePolicy
+  description: string
+}
+
+interface ServicePolicy {
+  input: string
+  output: string
+}
 
 interface PolicyPayload {
-  type: string;
-  interfaceName: string;
-  instanceId: string | number;
-  policyName: string;
+  type: string
+  interfaceName: string
+  instanceId: number
+  policyName: string
 }
 
 // Global UI Feedback State
 const status = reactive({
   type: '', // 'loading' | 'success' | 'error'
-  message: ''
-});
+  message: '',
+})
 
-const showResults = ref(false);
-const hideNoServicePolicy = ref(false);
-const rawData = ref<Record<string, any>>({});
+const showResults = ref(false)
+const hideNoServicePolicy = ref(false)
+const rawData = ref<Record<string, NetworkInterface>>({})
 
 // Keep a reference to the active device credentials for subsequent policy updates
-const activeDevice = ref<DeviceFormFields | null>(null);
+const activeDevice = ref<DeviceFormFields | null>(null)
 
-const dataListInput = ["police-10M", "police-20M", "police-50M", "police-100M", "police-200M", "police-300M"];
-const dataListOutput = ["shape-10M", "shape-20M", "shape-50M", "shape-100M", "shape-200M", "shape-300M"];
-const dataListBandwidth = ["10M", "20M", "50M", "100M", "200M", "300M"];
+const dataListInput = [
+  'police-10M',
+  'police-20M',
+  'police-50M',
+  'police-100M',
+  'police-200M',
+  'police-300M',
+]
+const dataListOutput = [
+  'shape-10M',
+  'shape-20M',
+  'shape-50M',
+  'shape-100M',
+  'shape-200M',
+  'shape-300M',
+]
+const dataListBandwidth = ['10M', '20M', '50M', '100M', '200M', '300M']
 
 const totalCount = computed(() => {
-  return Object.values(rawData.value).filter(config => typeof config === 'object').length;
-});
+  return Object.values(rawData.value).filter((config) => typeof config === 'object').length
+})
 
 const filteredInterfaces = computed(() => {
-  const list = [];
+  const list = []
   for (const [interfaceName, config] of Object.entries(rawData.value)) {
-    if (typeof config !== 'object') continue;
-    
-    const hasService = config.service_instance && config.service_instance.length > 0;
-    if (hideNoServicePolicy.value && !hasService) continue;
+    if (typeof config !== 'object') continue
+    if (!config) continue
 
-    list.push({ name: interfaceName, config });
+    const hasService = config.service_instance && config.service_instance.length > 0
+    if (hideNoServicePolicy.value && !hasService) continue
+
+    list.push({ name: interfaceName, config })
   }
-  return list;
-});
+  return list
+})
 
-const formattedRawResponse = computed(() => JSON.stringify(rawData.value, null, 2));
+const formattedRawResponse = computed(() => JSON.stringify(rawData.value, null, 2))
 
 function setStatus(type: 'loading' | 'success' | 'error' | '', message: string) {
-  status.type = type;
-  status.message = message;
+  status.type = type
+  status.message = message
 }
 
 // Core Fetch Configurations Triggered by the child form
 async function handleDeviceSubmit(formData: DeviceFormFields) {
-  showResults.value = false;
-  activeDevice.value = formData; // Store references dynamically for policy patch updates
+  showResults.value = false
+  activeDevice.value = formData // Store references dynamically for policy patch updates
 
   if (TEST_RESPONSE) {
     try {
-      const response = await fetch(TEST_JSON);
-      if (!response.ok) throw new Error('No Test JSON');
-      rawData.value = await response.json();
-      showResults.value = true;
+      const response = await fetch(TEST_JSON)
+      if (!response.ok) throw new Error('No Test JSON')
+      rawData.value = await response.json()
+      showResults.value = true
     } catch (error) {
-      setStatus('error', `Test JSON Error: ${(error as Error).message}`);
+      setStatus('error', `Test JSON Error: ${(error as Error).message}`)
     }
-    return;
+    return
   }
 
-  setStatus('loading', 'Processing Request...');
+  setStatus('loading', 'Processing Request...')
 
   try {
     const response = await fetch(`${SERVER_URL}/interfaces`, {
@@ -84,28 +115,28 @@ async function handleDeviceSubmit(formData: DeviceFormFields) {
         port: formData.port,
         username: formData.username,
         password: formData.password,
-        secret: formData.secret
+        secret: formData.secret,
       }),
-    });
+    })
 
-    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`)
 
-    const data = await response.json();
+    const data = await response.json()
     if (data.error) {
-      setStatus('error', `Error: ${data.error}`);
+      setStatus('error', `Error: ${data.error}`)
     } else {
-      setStatus('success', 'Data retrieved successfully!');
-      rawData.value = data;
-      showResults.value = true;
+      setStatus('success', 'Data retrieved successfully!')
+      rawData.value = data
+      showResults.value = true
     }
   } catch (error) {
-    setStatus('error', `Failed to fetch: ${(error as Error).message}`);
+    setStatus('error', `Failed to fetch: ${(error as Error).message}`)
   }
 }
 
 // Handle Child Component Updates
 async function handleGlobalPolicyUpdate(payload: PolicyPayload) {
-  if (!activeDevice.value) return;
+  if (!activeDevice.value) return
 
   const currentPayload = {
     device: {
@@ -114,35 +145,35 @@ async function handleGlobalPolicyUpdate(payload: PolicyPayload) {
       port: activeDevice.value.port,
       username: activeDevice.value.username,
       password: activeDevice.value.password,
-      secret: activeDevice.value.secret
+      secret: activeDevice.value.secret,
     },
     policy: {
       interface: payload.interfaceName,
       service_instance_id: payload.instanceId,
-      policy_name: payload.policyName
-    }
-  };
+      policy_name: payload.policyName,
+    },
+  }
 
-  setStatus('loading', 'Updating Policy Configuration...');
+  setStatus('loading', 'Updating Policy Configuration...')
 
   try {
     const response = await fetch(`${SERVER_URL}/config/service-policy/${payload.type}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(currentPayload),
-    });
+    })
 
-    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`)
 
-    const data = await response.json();
+    const data = await response.json()
     if (data.error) {
-      setStatus('error', `Update failed: ${data.error}`);
+      setStatus('error', `Update failed: ${data.error}`)
     } else {
-      setStatus('success', 'Policy updated successfully!');
-      rawData.value = data; 
+      setStatus('success', 'Policy updated successfully!')
+      rawData.value = data
     }
   } catch (error) {
-    setStatus('error', `Failed to sync policy: ${(error as Error).message}`);
+    setStatus('error', `Failed to sync policy: ${(error as Error).message}`)
   }
 }
 </script>
@@ -150,26 +181,28 @@ async function handleGlobalPolicyUpdate(payload: PolicyPayload) {
 <template>
   <div class="device-manager">
     <!-- Decoupled Component cleanly handling inputs -->
-    <DeviceForm class="card" @submit="handleDeviceSubmit" />
+    <div class="card">
+      <h2>Input Form</h2>
+      <DeviceForm @submit="handleDeviceSubmit" />
+    </div>
 
     <!-- Status Boxes & Filters -->
     <div v-if="status.message" :class="['status', status.type]">
       {{ status.message }}
     </div>
 
-    <div class="card controls">
-      <label>
-        <input v-model="hideNoServicePolicy" type="checkbox" id="hideNoServicePolicy" />
-        Hide interfaces with no service policy
-      </label>
-      <div id="interfaceFilterStatus">
-        Showing {{ filteredInterfaces.length }}/{{ totalCount }} interfaces
-      </div>
-    </div>
-
     <!-- Interface Matrix -->
     <div v-if="showResults" class="card results show" id="results">
       <h2>Interfaces</h2>
+      <div class="controls">
+        <div>
+          <input v-model="hideNoServicePolicy" type="checkbox" id="hideNoServicePolicy" />
+          <label for="hideNoServicePolicy"> Hide interfaces with no service policy </label>
+        </div>
+        <small id="interfaceFilterStatus">
+          Showing {{ filteredInterfaces.length }}/{{ totalCount }} interfaces
+        </small>
+      </div>
       <datalist id="datalist-input">
         <option v-for="val in dataListInput" :key="val" :value="val" />
       </datalist>
@@ -192,15 +225,18 @@ async function handleGlobalPolicyUpdate(payload: PolicyPayload) {
       </div>
     </div>
 
-    <pre class="card" id="rawResponse">{{ formattedRawResponse }}</pre>
+    <div v-if="showResults" class="card show" id="rawResponse">
+      <h2>Raw Response</h2>
+      <pre><code>{{ formattedRawResponse }}</code></pre>
+    </div>
   </div>
 </template>
 
 <style src="./tokens.css"></style>
 <style scoped>
-.device-manager { 
-  margin: auto; 
-  width: max-content; 
+.device-manager {
+  margin: auto;
+  width: max-content;
   max-width: 1200px;
   display: flex;
   flex-direction: column;
@@ -264,8 +300,14 @@ async function handleGlobalPolicyUpdate(payload: PolicyPayload) {
   color: var(--color-text-main);
 }
 
-#rawResponse {
+.controls {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+}
+
+pre {
   max-height: 80vh;
-  overflow-y: auto; 
+  overflow-y: auto;
 }
 </style>

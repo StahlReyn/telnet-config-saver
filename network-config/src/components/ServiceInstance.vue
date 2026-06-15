@@ -1,25 +1,25 @@
 <script setup lang="ts">
-import { computed } from 'vue';
-import PolicyItem from './PolicyItem.vue';
+import { computed } from 'vue'
+import PolicyItem from './PolicyItem.vue'
 
 // Define the incoming props from the parent InterfaceCard
 const props = defineProps({
   interfaceName: { type: String, required: true },
-  instance: { type: Object, required: true }
-});
+  instance: { type: Object, required: true },
+})
 
 // Emits catch the change event from policy components and bubble it to InterfaceCard
-const emit = defineEmits(['policy-changed']);
+const emit = defineEmits(['policy-changed'])
 
 // Clean up description symbols reactively via standard computed property
 const cleanedDescription = computed(() => {
-  const rawDesc = props.instance.description || '(No description)';
-  return rawDesc.replace(/^[\$\*\!\= ]+|[\$\*\!\= ]+$/g, '');
-});
+  const rawDesc = props.instance.description || '(No description)'
+  return rawDesc.replace(/^[\$\*\!\= ]+|[\$\*\!\= ]+$/g, '')
+})
 
 // Capture policy changes from grandchildren and bubble them directly up to the parent
 function forwardPolicyChange(eventDetail: HTMLInputElement) {
-  emit('policy-changed', eventDetail);
+  emit('policy-changed', eventDetail)
 }
 </script>
 
@@ -69,54 +69,54 @@ function forwardPolicyChange(eventDetail: HTMLInputElement) {
 }
 
 .service-instances {
-    display: flex;
-    flex-flow: column;
-    gap: 4px;
-    padding-bottom: 8px;
+  display: flex;
+  flex-flow: column;
+  gap: 4px;
+  padding-bottom: 8px;
 }
 
 .service-instances-empty {
-    color: var(--color-text-empty);
-    font-style: italic;
-    font-size: 0.9em;
+  color: var(--color-text-empty);
+  font-style: italic;
+  font-size: 0.9em;
 }
 
 .service-instance {
-    background: var(--color-bg-nested);
-    padding: 4px;
-    border-radius: 4px;
-    font-size: 0.9em;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    gap: 4px;
+  background: var(--color-bg-nested);
+  padding: 4px;
+  border-radius: 4px;
+  font-size: 0.9em;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 4px;
 }
 
 .service-id {
-    font-weight: 700;
-    width: 2em;
-    font-size: 1.5em;
-    text-align: center;
-    display: none;
+  font-weight: 700;
+  width: 2em;
+  font-size: 1.5em;
+  text-align: center;
+  display: none;
 }
 
 .service-desc {
-    font-size: 1.2em;
-    color: var(--color-text-muted);
-    min-height: 20px;
-    margin: auto;
-    padding: 4px;
-    flex-grow: 1;
-    flex-basis: 0;
-    min-width: 16em;
+  font-size: 1.2em;
+  color: var(--color-text-muted);
+  min-height: 20px;
+  margin: auto;
+  padding: 4px;
+  flex-grow: 1;
+  flex-basis: 0;
+  min-width: 16em;
 }
 
 .service-policy {
-    flex-grow: 1;
-    flex-basis: 0;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 5px;
-    min-width: 16em;
+  flex-grow: 1;
+  flex-basis: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  min-width: 16em;
 }
 </style>
