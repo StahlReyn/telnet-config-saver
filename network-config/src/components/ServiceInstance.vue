@@ -112,7 +112,7 @@ function forwardPolicyChange(eventDetail: HTMLInputElement) {
 }
 
 .service-policy {
-  flex-grow: 1;
+  flex-grow: 2;
   flex-basis: 0;
   display: flex;
   flex-wrap: wrap;

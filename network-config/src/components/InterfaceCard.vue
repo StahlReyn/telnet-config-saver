@@ -4,7 +4,6 @@ import ServiceInstance from './ServiceInstance.vue'
 
 // Define the incoming parameters from the parent component
 const props = defineProps({
-  device: { type: Object, required: true },
   interfaceName: { type: String, required: true },
   config: { type: Object, required: true },
 })
@@ -118,5 +117,6 @@ summary:hover > * {
 .service-instances-empty {
   color: #888;
   font-style: italic;
+  margin-bottom: 4px;
 }
 </style>

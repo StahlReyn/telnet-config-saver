@@ -1,27 +1,11 @@
 <script setup lang="ts">
 import { ref, reactive, computed } from 'vue'
 import DeviceForm, { type DeviceFormFields } from './components/DeviceForm.vue'
-import InterfaceCard from './components/InterfaceCard.vue'
+import InterfacesResult from './components/InterfacesResult.vue'
 
 const SERVER_URL = 'http://192.168.194.1:8000'
 const TEST_RESPONSE = true
 const TEST_JSON = 'data/test_response.json'
-
-interface NetworkInterface {
-  description: string
-  service_instance: ServiceInstance[]
-}
-
-interface ServiceInstance {
-  id: number
-  service_policy: ServicePolicy
-  description: string
-}
-
-interface ServicePolicy {
-  input: string
-  output: string
-}
 
 interface PolicyPayload {
   type: string
@@ -37,47 +21,10 @@ const status = reactive({
 })
 
 const showResults = ref(false)
-const hideNoServicePolicy = ref(false)
-const rawData = ref<Record<string, NetworkInterface>>({})
+const rawData = ref<Record<string, Object>>({})
 
 // Keep a reference to the active device credentials for subsequent policy updates
 const activeDevice = ref<DeviceFormFields | null>(null)
-
-const dataListInput = [
-  'police-10M',
-  'police-20M',
-  'police-50M',
-  'police-100M',
-  'police-200M',
-  'police-300M',
-]
-const dataListOutput = [
-  'shape-10M',
-  'shape-20M',
-  'shape-50M',
-  'shape-100M',
-  'shape-200M',
-  'shape-300M',
-]
-const dataListBandwidth = ['10M', '20M', '50M', '100M', '200M', '300M']
-
-const totalCount = computed(() => {
-  return Object.values(rawData.value).filter((config) => typeof config === 'object').length
-})
-
-const filteredInterfaces = computed(() => {
-  const list = []
-  for (const [interfaceName, config] of Object.entries(rawData.value)) {
-    if (typeof config !== 'object') continue
-    if (!config) continue
-
-    const hasService = config.service_instance && config.service_instance.length > 0
-    if (hideNoServicePolicy.value && !hasService) continue
-
-    list.push({ name: interfaceName, config })
-  }
-  return list
-})
 
 const formattedRawResponse = computed(() => JSON.stringify(rawData.value, null, 2))
 
@@ -194,35 +141,7 @@ async function handleGlobalPolicyUpdate(payload: PolicyPayload) {
     <!-- Interface Matrix -->
     <div v-if="showResults" class="card results show" id="results">
       <h2>Interfaces</h2>
-      <div class="controls">
-        <div>
-          <input v-model="hideNoServicePolicy" type="checkbox" id="hideNoServicePolicy" />
-          <label for="hideNoServicePolicy"> Hide interfaces with no service policy </label>
-        </div>
-        <small id="interfaceFilterStatus">
-          Showing {{ filteredInterfaces.length }}/{{ totalCount }} interfaces
-        </small>
-      </div>
-      <datalist id="datalist-input">
-        <option v-for="val in dataListInput" :key="val" :value="val" />
-      </datalist>
-      <datalist id="datalist-output">
-        <option v-for="val in dataListOutput" :key="val" :value="val" />
-      </datalist>
-      <datalist id="datalist-bandwidth">
-        <option v-for="val in dataListBandwidth" :key="val" :value="val" />
-      </datalist>
-
-      <div id="interfaceContainer">
-        <InterfaceCard
-          v-for="item in filteredInterfaces"
-          :key="item.name"
-          :device="activeDevice || {}"
-          :interface-name="item.name"
-          :config="item.config"
-          @policy-updated="handleGlobalPolicyUpdate"
-        />
-      </div>
+      <InterfacesResult :rawData="rawData" @policy-updated="handleGlobalPolicyUpdate"/>
     </div>
 
     <div v-if="showResults" class="card show" id="rawResponse">
@@ -236,7 +155,7 @@ async function handleGlobalPolicyUpdate(payload: PolicyPayload) {
 <style scoped>
 .device-manager {
   margin: auto;
-  width: max-content;
+  padding: auto;
   max-width: 1200px;
   display: flex;
   flex-direction: column;
@@ -281,12 +200,6 @@ async function handleGlobalPolicyUpdate(payload: PolicyPayload) {
   color: var(--status-succ-text);
 }
 
-#interfaceContainer {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-}
-
 /* --- Response Payloads --- */
 .raw-response {
   margin-top: 20px;
@@ -298,12 +211,6 @@ async function handleGlobalPolicyUpdate(payload: PolicyPayload) {
 .raw-response h3 {
   margin-bottom: 10px;
   color: var(--color-text-main);
-}
-
-.controls {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 10px;
 }
 
 pre {

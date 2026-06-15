@@ -74,17 +74,13 @@ function handleKeyDown(event: KeyboardEvent) {
 .policy-item {
   display: flex;
   align-items: center;
-}
-.policy-item-input {
-  padding: 0.25rem;
-}
-.policy-item {
   color: var(--color-text-muted);
   margin: auto;
   padding: 4px;
   background: var(--color-bg-card);
   border-radius: 3px;
   border-left: 3px solid var(--p-green-700);
+  min-width: 14em;
 
   flex-grow: 1;
   flex-basis: 0;
