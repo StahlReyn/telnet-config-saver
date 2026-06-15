@@ -71,7 +71,6 @@ function handleKeyDown(event: KeyboardEvent) {
 </template>
 
 <style scoped>
-/* Paste styling specific to your policy-item layout nodes here */
 .policy-item {
   display: flex;
   align-items: center;
@@ -79,4 +78,40 @@ function handleKeyDown(event: KeyboardEvent) {
 .policy-item-input {
   padding: 0.25rem;
 }
+.policy-item {
+    color: var(--color-text-muted);
+    margin: auto;
+    padding: 4px;
+    background: var(--color-bg-card);
+    border-radius: 3px;
+    border-left: 3px solid var(--p-green-700);
+
+    flex-grow: 1;
+    flex-basis: 0;
+    display: flex;
+    gap: 6px
+}
+
+.policy-item:nth-child(1) {
+    border-color: var(--p-red-700);
+}
+
+.policy-item-label {
+    margin: auto;
+    font-weight: bold;
+}
+
+.policy-item-input {
+    min-width: 6em;
+    padding: 4px;
+    flex-grow: 1;
+}
+
+.no-policy {
+    color: var(--color-text-empty);
+    font-style: italic;
+    border-color: var(--p-neutral-400);
+    background: transparent;
+}
+
 </style>

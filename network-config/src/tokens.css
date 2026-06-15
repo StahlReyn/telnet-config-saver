@@ -152,3 +152,27 @@ pre {
     -webkit-mask-image: linear-gradient(to right, black 80%, transparent 100%);
     mask-image: linear-gradient(to right, black 80%, transparent 100%);
 }
+
+/* --- Output Visualizations --- */
+.results {
+    display: none;
+}
+
+.results.show {
+    display: block;
+}
+
+/* --- Hover Response --- */
+summary {
+    transition: transform 0.2s, color 0.2s;
+}
+
+summary:hover {
+    color: var(--color-brand-hover);
+    transform: translateY(-2px);
+}
+
+summary:active {
+    color: var(--color-brand);
+    transform: translateY(2px);
+}

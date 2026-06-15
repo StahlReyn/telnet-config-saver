@@ -19,9 +19,9 @@ const emit = defineEmits<{
 // Local form state isolated inside the component
 const form = reactive<DeviceFormFields>({
   deviceType: 'cisco_ios',
-  host: '',
+  host: '172.168.20.1',
   port: 22,
-  username: '',
+  username: 'cisco',
   password: '',
   secret: ''
 });
@@ -71,7 +71,60 @@ function handleSubmit() {
   flex-wrap: wrap;
   align-items: center;
 }
-.form-group input, .form-group select {
-  padding: 0.35rem;
+
+.form-card {
+    background: var(--color-bg-card);
+    border-radius: 10px;
+    padding: 30px;
+    box-shadow: 0 5px 10px var(--shadow-alpha-heavy);
+    margin-bottom: 20px;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+/* --- Interactive Elements --- */
+.button-group {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+button.submit {
+    background: var(--color-brand);
+    color: var(--color-text-on-brand);
+    flex: 1;
+}
+
+button.submit:hover {
+    background: var(--color-brand-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 3px 10px rgb(from var(--color-brand) r g b / 0.4);
+}
+
+button.submit:disabled {
+    background: var(--p-neutral-400);
+    color: var(--p-neutral-600);
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+button.clear {
+    background: var(--color-bg-element);
+    color: var(--color-text-main);
+}
+
+button.clear:hover {
+    background: color-mix(in srgb, var(--color-bg-element), black 8%);
 }
 </style>

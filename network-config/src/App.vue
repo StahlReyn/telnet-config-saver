@@ -150,14 +150,14 @@ async function handleGlobalPolicyUpdate(payload: PolicyPayload) {
 <template>
   <div class="device-manager">
     <!-- Decoupled Component cleanly handling inputs -->
-    <DeviceForm @submit="handleDeviceSubmit" />
+    <DeviceForm class="card" @submit="handleDeviceSubmit" />
 
     <!-- Status Boxes & Filters -->
     <div v-if="status.message" :class="['status', status.type]">
       {{ status.message }}
     </div>
 
-    <div class="controls">
+    <div class="card controls">
       <label>
         <input v-model="hideNoServicePolicy" type="checkbox" id="hideNoServicePolicy" />
         Hide interfaces with no service policy
@@ -168,7 +168,8 @@ async function handleGlobalPolicyUpdate(payload: PolicyPayload) {
     </div>
 
     <!-- Interface Matrix -->
-    <div v-if="showResults" class="results show" id="results">
+    <div v-if="showResults" class="card results show" id="results">
+      <h2>Interfaces</h2>
       <datalist id="datalist-input">
         <option v-for="val in dataListInput" :key="val" :value="val" />
       </datalist>
@@ -189,19 +190,82 @@ async function handleGlobalPolicyUpdate(payload: PolicyPayload) {
           @policy-updated="handleGlobalPolicyUpdate"
         />
       </div>
-
-      <pre id="rawResponse">{{ formattedRawResponse }}</pre>
     </div>
+
+    <pre class="card" id="rawResponse">{{ formattedRawResponse }}</pre>
   </div>
 </template>
 
 <style src="./tokens.css"></style>
-<style src="./style.css"></style>
 <style scoped>
-.device-manager { margin: auto; width: max-content; max-width: 1200px; }
-.status.loading { color: orange; }
-.status.success { color: green; }
-.status.error { color: red; }
-.results { display: none; }
-.results.show { display: block; }
+.device-manager { 
+  margin: auto; 
+  width: max-content; 
+  max-width: 1200px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.card {
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 5px var(--shadow-alpha-heavy);
+  flex-grow: 1;
+}
+
+.status {
+  margin: 0;
+  padding: 15px;
+  font-weight: 500;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100vw;
+  box-shadow: 0 0 10px var(--shadow-alpha-heavy);
+  background-color: var(--color-bg-card);
+  z-index: 100;
+}
+
+.status.loading {
+  display: block;
+  background: var(--status-load-bg);
+  color: var(--status-load-text);
+}
+
+.status.error {
+  display: block;
+  background: var(--status-err-bg);
+  color: var(--status-err-text);
+}
+
+.status.success {
+  display: block;
+  background: var(--status-succ-bg);
+  color: var(--status-succ-text);
+}
+
+#interfaceContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+/* --- Response Payloads --- */
+.raw-response {
+  margin-top: 20px;
+  padding: 20px;
+  background: var(--color-bg-nested);
+  border-radius: 10px;
+}
+
+.raw-response h3 {
+  margin-bottom: 10px;
+  color: var(--color-text-main);
+}
+
+#rawResponse {
+  max-height: 80vh;
+  overflow-y: auto; 
+}
 </style>
