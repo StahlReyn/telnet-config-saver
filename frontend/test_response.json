@@ -1,28 +1,127 @@
 {
-  "Loopback0": { "description": "", "service_instance": [] },
-  "GigabitEthernet1": { "description": "", "service_instance": [] },
-  "GigabitEthernet2": { "description": "", "service_instance": [] },
+  "Loopback0": {
+    "description": "Router-ID BGP-OSPF",
+    "service_instance": []
+  },
+  "GigabitEthernet1": {
+    "description": "WAN-Uplink-Primary_ISP-A",
+    "service_instance": []
+  },
+  "GigabitEthernet2": {
+    "description": "WAN-Uplink-Backup_ISP-B",
+    "service_instance": []
+  },
   "GigabitEthernet3": {
-    "description": "*** VPN1234 MTS ***",
+    "description": "*** Metro-Ethernet Trunk Line 1 ***",
     "service_instance": [
       {
-        "id": 1,
-        "service-policy": { "input": "police-20M", "output": "shape-20M" },
-        "description": "*** VPN1234 MTS ***"
+        "id": 10,
+        "service-policy": { "input": "police-50M", "output": "shape-50M" },
+        "description": "*** VPN_CustA_HQ_Data ***"
       },
-      { "id": 2, "service-policy": {}, "description": "*** VPN1234 MTS ***" }
+      {
+        "id": 20,
+        "service-policy": { "input": "police-10M", "output": "shape-10M" },
+        "description": "*** VPN_CustA_Voice_VoIP ***"
+      },
+      {
+        "id": 30,
+        "service-policy": {},
+        "description": "*** VPN_CustA_Guest_WiFi ***"
+      },
+      {
+        "id": 100,
+        "service-policy": { "input": "police-100M", "output": "shape-100M" },
+        "description": "*** VPN_CustB_Main_Branch ***"
+      },
+      {
+        "id": 101,
+        "service-policy": {},
+        "description": "*** VPN_CustB_Backup_Storage ***"
+      },
+      {
+        "id": 500,
+        "service-policy": { "input": "police-5M", "output": "shape-5M" },
+        "description": "*** Management_OOB_Switch ***"
+      }
     ]
   },
   "GigabitEthernet4": {
-    "description": "*** VPN4321 STS ***",
+    "description": "*** MPLS Multi-Tenant Aggregation Trunk ***",
     "service_instance": [
       {
-        "id": 1,
-        "service-policy": { "input": "police-10M", "output": "shape-10M" },
-        "description": "*** VPN4321 STS ***"
+        "id": 101,
+        "service-policy": { "input": "police-20M", "output": "shape-20M" },
+        "description": "*** CORP_Finance_Department ***"
       },
-      { "id": 2, "service-policy": {}, "description": "*** VPN4321 STS ***" }
+      {
+        "id": 102,
+        "service-policy": { "input": "police-20M", "output": "shape-20M" },
+        "description": "*** CORP_HR_Portal ***"
+      },
+      {
+        "id": 201,
+        "service-policy": { "input": "police-200M", "output": "shape-200M" },
+        "description": "*** RETAIL_Store_Front_POS ***"
+      },
+      {
+        "id": 202,
+        "service-policy": {},
+        "description": "*** RETAIL_CCTV_Feed ***"
+      },
+      {
+        "id": 305,
+        "service-policy": {},
+        "description": "*** PARTNER_Extranet_Access ***"
+      },
+      {
+        "id": 446,
+        "service-policy": { "input": "police-50M", "output": "shape-50M" },
+        "description": "*** GOVT_Secure_Channel ***"
+      },
+      {
+        "id": 553,
+        "service-policy": {},
+        "description": "*** IOT_Telemetry_Sensors ***"
+      },
+      {
+        "id": 1002,
+        "service-policy": { "input": "police-1G", "output": "shape-1G" },
+        "description": "*** DATA_CENTER_Replication ***"
+      },
+      {
+        "id": 2003,
+        "service-policy": {},
+        "description": "*** LAB_Testing_Environment ***"
+      },
+      {
+        "id": 4000,
+        "service-policy": { "input": "police-10M", "output": "shape-10M" },
+        "description": "*** GUEST_Internet_Public ***"
+      }
     ]
   },
-  "BDI100": { "description": "", "service_instance": [] }
+  "TenGigabitEthernet0/0/0": {
+    "description": "*** Core-Switch-Stack-Trunking ***",
+    "service_instance": [
+      {
+        "id": 1000,
+        "service-policy": { "input": "police-2G", "output": "shape-2G" },
+        "description": "*** Transit_VLAN_Core1 ***"
+      },
+      {
+        "id": 2000,
+        "service-policy": { "input": "police-2G", "output": "shape-2G" },
+        "description": "*** Transit_VLAN_Core2 ***"
+      }
+    ]
+  },
+  "BDI100": {
+    "description": "VLAN100_Internal_Users",
+    "service_instance": []
+  },
+  "BDI200": {
+    "description": "VLAN200_Server_Farm",
+    "service_instance": []
+  }
 }
