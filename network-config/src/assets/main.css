@@ -21,3 +21,111 @@ a,
   }
 }
 
+h1 {
+    margin: auto;
+    color: var(--color-text-main);
+}
+
+h2 {
+    font-weight: bold;
+    margin-bottom: 15px;
+    border-bottom: var(--color-bg-element) solid 2px;
+    color: var(--color-text-main);
+}
+
+label {
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--color-text-main);
+}
+
+/* --- Form Fields --- */
+input, select {
+    padding: 10px 12px;
+    border: 1px solid var(--color-border);
+    border-radius: 5px;
+    font-size: 14px;
+    background-color: var(--color-bg-card);
+    color: var(--color-text-main);
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+input:focus, select:focus {
+    outline: none;
+    border-color: var(--color-brand);
+    box-shadow: 0 0 0 3px rgb(from var(--color-brand) r g b / 0.15);
+}
+
+button {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.1s;
+}
+
+pre {
+    background: var(--color-bg-card);
+    padding: 15px;
+    border-radius: 5px;
+    overflow-x: auto;
+    font-size: 12px;
+    line-height: 1.4;
+    color: var(--color-text-main);
+}
+
+code {
+    font-family: 'Consolas', 'Courier New', Courier, monospace;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.header {
+    text-align: center;
+    color: var(--color-text-main);
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.header h1 {
+    font-size: 2.5em;
+    margin-bottom: 10px;
+}
+
+.fade-text-horizontal {
+    white-space: nowrap;
+    overflow: hidden;
+    display: block;
+    -webkit-mask-image: linear-gradient(to right, black 80%, transparent 100%);
+    mask-image: linear-gradient(to right, black 80%, transparent 100%);
+}
+
+/* --- Output Visualizations --- */
+.results {
+    display: none;
+}
+
+.results.show {
+    display: block;
+}
+
+/* --- Hover Response --- */
+summary {
+    transition: transform 0.2s, color 0.2s;
+}
+
+summary:hover {
+    color: var(--color-brand-hover);
+    transform: translateY(-2px);
+}
+
+summary:active {
+    color: var(--color-brand);
+    transform: translateY(2px);
+}

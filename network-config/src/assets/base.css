@@ -84,3 +84,81 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+
+/* COPIED OVER FROM OLD */
+
+:root {
+    /* Supported system standards */
+    color-scheme: light dark;
+
+    /* --- Primitive Tokens (Base Palette) --- */
+    --p-indigo-500: #667eea;
+    --p-indigo-600: #5568d3;
+    --p-blue-100: #e3f2fd;
+    --p-blue-700: #1976d2;
+    --p-red-100: #ffebee;
+    --p-red-700: #c62828;
+    --p-green-100: #e8f5e9;
+    --p-green-700: #2e7d32;
+    
+    /* Neutral steps (Light Mode Bases) */
+    --p-neutral-0: #ffffff;
+    --p-neutral-50: #f5f5f5;
+    --p-neutral-100: #fafafa;
+    --p-neutral-200: #eeeeee;
+    --p-neutral-300: #e0e0e0;
+    --p-neutral-400: #cccccc;
+    --p-neutral-600: #666666;
+    --p-neutral-700: #555555;
+    --p-neutral-800: #333333;
+    --p-neutral-950: #0f172a;
+
+    /* --- Semantic Tokens (Context Adaptive) --- */
+    --color-bg-body: light-dark(var(--p-neutral-0), var(--p-neutral-950));
+    --color-bg-card: light-dark(var(--p-neutral-0), #1e293b);
+    --color-bg-nested: light-dark(var(--p-neutral-50), #0f172a);
+    --color-bg-element: light-dark(#f0f0f0, #334155);
+    
+    --color-text-main: light-dark(var(--p-neutral-800), var(--p-neutral-100));
+    --color-text-muted: light-dark(var(--p-neutral-600), #a9b9cf);
+    --color-text-empty: light-dark(#999999, #64748b);
+    --color-text-on-brand: var(--p-neutral-0);
+
+    --color-border: light-dark(#dddddd, #475569);
+    --color-border-divider: light-dark(#eeeeee, #334155);
+
+    --color-brand: var(--p-indigo-500);
+    --color-brand-hover: var(--p-indigo-600);
+
+    /* System Status Sets */
+    --status-load-bg: light-dark(var(--p-blue-100), #0c4a6e);
+    --status-load-text: light-dark(var(--p-blue-700), #38bdf8);
+    --status-err-bg: light-dark(var(--p-red-100), #7f1d1d);
+    --status-err-text: light-dark(var(--p-red-700), #fca5a5);
+    --status-succ-bg: light-dark(var(--p-green-100), #064e3b);
+    --status-succ-text: light-dark(var(--p-green-700), #4ade80);
+
+    /* Shadow Alpha Maps */
+    --shadow-alpha-main: rgba(0, 0, 0, 0.1);
+    --shadow-alpha-heavy: rgba(0, 0, 0, 0.3);
+}
+
+/* --- Base Layout --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Global rule: Tell the browser it is allowed to animate to "auto" height */
+html {
+    interpolate-size: allow-keywords;
+}
+
+body {
+    font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    min-height: 100vh;
+    background-color: var(--color-bg-body);
+    color: var(--color-text-main);
+}

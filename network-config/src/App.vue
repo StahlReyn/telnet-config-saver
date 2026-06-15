@@ -151,7 +151,6 @@ async function handleGlobalPolicyUpdate(payload: PolicyPayload) {
   </div>
 </template>
 
-<style src="./tokens.css"></style>
 <style scoped>
 .device-manager {
   margin: auto;

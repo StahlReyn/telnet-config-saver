@@ -29,7 +29,7 @@ function handlePolicyChanged(eventDetail: HTMLInputElement) {
       <summary class="interface-header">
         <div class="interface-name">{{ interfaceName }}</div>
         <div class="interface-description">
-          {{ config.description || '(No description)' }}
+          {{ config.description ? config.description.replace(/^[\$\*\!\= ]+|[\$\*\!\= ]+$/g, '') : '(No description)' }}
         </div>
       </summary>
 

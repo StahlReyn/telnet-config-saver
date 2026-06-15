@@ -34,42 +34,46 @@ function handleSubmit() {
 
 <template>
   <form @submit.prevent="handleSubmit" class="device-form">
-    <div class="form-group">
-      <select v-model="form.deviceType" id="deviceType">
-        <option value="cisco_ios_telnet">Cisco IOS (Telnet)</option>
-        <option value="cisco_xr_telnet">Cisco XR (Telnet)</option>
-        <option value="juniper_telnet">Juniper (Telnet)</option>
-      </select>
+    <div class="button-group">
+      <div class="form-group">
+        <select v-model="form.deviceType" id="deviceType">
+          <option value="cisco_ios_telnet">Cisco IOS (Telnet)</option>
+          <option value="cisco_xr_telnet">Cisco XR (Telnet)</option>
+          <option value="juniper_telnet">Juniper (Telnet)</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <input v-model="form.host" id="host" placeholder="Host" required />
+      </div>
+
+      <div class="form-group">
+        <input v-model.number="form.port" id="port" type="number" placeholder="Port" required />
+      </div>
+
+      <div class="form-group">
+        <input v-model="form.username" id="username" placeholder="Username" />
+      </div>
+
+      <div class="form-group">
+        <input v-model="form.password" id="password" type="password" placeholder="Password" />
+      </div>
+
+      <div class="form-group">
+        <input v-model="form.secret" id="secret" type="password" placeholder="Secret" />
+      </div>
     </div>
 
-    <div class="form-group">
-      <input v-model="form.host" id="host" placeholder="Host" required />
+    <div class="button-group">
+      <button type="submit">Get Configuration</button>
     </div>
-
-    <div class="form-group">
-      <input v-model.number="form.port" id="port" type="number" placeholder="Port" required />
-    </div>
-
-    <div class="form-group">
-      <input v-model="form.username" id="username" placeholder="Username" />
-    </div>
-
-    <div class="form-group">
-      <input v-model="form.password" id="password" type="password" placeholder="Password" />
-    </div>
-
-    <div class="form-group">
-      <input v-model="form.secret" id="secret" type="password" placeholder="Secret" />
-    </div>
-
-    <button type="submit">Get Configuration</button>
   </form>
 </template>
 
 <style scoped>
 .device-form {
   display: flex;
-  gap: 0.5rem;
+  gap: 20px;
   flex-wrap: wrap;
   align-items: center;
 }
@@ -82,29 +86,18 @@ function handleSubmit() {
   margin-bottom: 20px;
 }
 
-.form-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 20px;
-  margin-bottom: 20px;
-}
-
-.form-group {
-  display: flex;
-  flex-direction: column;
-}
-
-/* --- Interactive Elements --- */
 .button-group {
   display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  flex-grow: 1;
   gap: 10px;
-  margin-top: 20px;
 }
 
 button.submit {
   background: var(--color-brand);
   color: var(--color-text-on-brand);
-  flex: 1;
+  flex-grow: 1;
 }
 
 button.submit:hover {
