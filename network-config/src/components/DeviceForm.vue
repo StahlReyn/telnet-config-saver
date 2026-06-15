@@ -18,10 +18,10 @@ const emit = defineEmits<{
 
 // Local form state isolated inside the component
 const form = reactive<DeviceFormFields>({
-  deviceType: 'cisco_ios',
-  host: '172.168.20.1',
-  port: 22,
-  username: 'cisco',
+  deviceType: 'cisco_ios_telnet',
+  host: '172.19.20.218',
+  port: 30006,
+  username: '',
   password: '',
   secret: '',
 })
@@ -36,7 +36,9 @@ function handleSubmit() {
   <form @submit.prevent="handleSubmit" class="device-form">
     <div class="form-group">
       <select v-model="form.deviceType" id="deviceType">
-        <option value="cisco_ios">Cisco IOS</option>
+        <option value="cisco_ios_telnet">Cisco IOS (Telnet)</option>
+        <option value="cisco_xr_telnet">Cisco XR (Telnet)</option>
+        <option value="juniper_telnet">Juniper (Telnet)</option>
       </select>
     </div>
 
@@ -49,7 +51,7 @@ function handleSubmit() {
     </div>
 
     <div class="form-group">
-      <input v-model="form.username" id="username" placeholder="Username" required />
+      <input v-model="form.username" id="username" placeholder="Username" />
     </div>
 
     <div class="form-group">

@@ -4,7 +4,7 @@ from pydantic import BaseModel # type: ignore
 from fastapi.middleware.cors import CORSMiddleware # type: ignore
 
 app = FastAPI()
-# py -m fastapi run api/main.py --host 192.168.194.1 --port 8000
+# py -m fastapi run api/main.py --host 192.168.197.241 --port 8000
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],            
@@ -36,7 +36,7 @@ def read_root():
 
 
 @app.post("/interfaces")
-def read_item(device: DeviceConfig):
+def post_interfaces(device: DeviceConfig):
     try:
         output = get_service_policy(device.model_dump())
         return output

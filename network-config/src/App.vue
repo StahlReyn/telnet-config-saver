@@ -3,8 +3,8 @@ import { ref, reactive, computed } from 'vue'
 import DeviceForm, { type DeviceFormFields } from './components/DeviceForm.vue'
 import InterfacesResult from './components/InterfacesResult.vue'
 
-const SERVER_URL = 'http://192.168.194.1:8000'
-const TEST_RESPONSE = true
+const SERVER_URL = 'http://192.168.197.241:8000'
+const TEST_RESPONSE = false
 const TEST_JSON = 'data/test_response.json'
 
 interface PolicyPayload {
