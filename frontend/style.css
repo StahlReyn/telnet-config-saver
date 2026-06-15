@@ -286,3 +286,8 @@ details[open] > .interface-header {
     margin-bottom: 10px;
     color: var(--color-text-main);
 }
+
+#rawResponse {
+    max-height: 80vh;
+    overflow-y: auto; 
+}

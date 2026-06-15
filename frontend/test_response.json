@@ -1,127 +1,851 @@
 {
   "Loopback0": {
-    "description": "Router-ID BGP-OSPF",
+    "description": "Router-ID Loopback0",
+    "service_instance": []
+  },
+  "Loopback1": {
+    "description": "Router-ID Loopback1",
     "service_instance": []
   },
   "GigabitEthernet1": {
-    "description": "WAN-Uplink-Primary_ISP-A",
+    "description": "WAN-Uplink-Downstream_Unused",
     "service_instance": []
   },
   "GigabitEthernet2": {
-    "description": "WAN-Uplink-Backup_ISP-B",
-    "service_instance": []
-  },
-  "GigabitEthernet3": {
-    "description": "*** Metro-Ethernet Trunk Line 1 ***",
+    "description": "*** High-Density Cisco Trunk Line (GigabitEthernet2) ***",
     "service_instance": [
       {
-        "id": 10,
-        "service-policy": { "input": "police-50M", "output": "shape-50M" },
-        "description": "*** VPN_CustA_HQ_Data ***"
-      },
-      {
-        "id": 20,
-        "service-policy": { "input": "police-10M", "output": "shape-10M" },
-        "description": "*** VPN_CustA_Voice_VoIP ***"
-      },
-      {
-        "id": 30,
+        "id": 117,
         "service-policy": {},
-        "description": "*** VPN_CustA_Guest_WiFi ***"
+        "description": "*** VPN7049 ABV_117 ***"
       },
       {
-        "id": 100,
-        "service-policy": { "input": "police-100M", "output": "shape-100M" },
-        "description": "*** VPN_CustB_Main_Branch ***"
-      },
-      {
-        "id": 101,
+        "id": 501,
         "service-policy": {},
-        "description": "*** VPN_CustB_Backup_Storage ***"
+        "description": "*** VPN2650 RETAIL_501 ***"
       },
       {
-        "id": 500,
-        "service-policy": { "input": "police-5M", "output": "shape-5M" },
-        "description": "*** Management_OOB_Switch ***"
+        "id": 513,
+        "service-policy": {},
+        "description": "*** VPN2511 ABV_513 ***"
+      },
+      {
+        "id": 542,
+        "service-policy": {
+          "input": "police-10M",
+          "output": "shape-10M"
+        },
+        "description": "*** VPN9318 RETAIL_542 ***"
+      },
+      {
+        "id": 686,
+        "service-policy": {},
+        "description": "*** VPN9713 CORP_686 ***"
+      },
+      {
+        "id": 716,
+        "service-policy": {},
+        "description": "*** VPN4474 ABV_716 ***"
+      },
+      {
+        "id": 826,
+        "service-policy": {},
+        "description": "*** VPN6127 ABV_826 ***"
+      },
+      {
+        "id": 885,
+        "service-policy": {
+          "input": "police-2G",
+          "output": "shape-2G"
+        },
+        "description": "*** VPN1639 ABV_885 ***"
+      },
+      {
+        "id": 921,
+        "service-policy": {},
+        "description": "*** VPN6015 FGS_921 ***"
+      },
+      {
+        "id": 1089,
+        "service-policy": {},
+        "description": "*** VPN7263 STS_1089 ***"
+      },
+      {
+        "id": 1150,
+        "service-policy": {
+          "input": "police-1G",
+          "output": "shape-1G"
+        },
+        "description": "*** VPN9550 STS_1150 ***"
+      },
+      {
+        "id": 1330,
+        "service-policy": {
+          "input": "police-50M",
+          "output": "shape-50M"
+        },
+        "description": "*** VPN6683 STS_1330 ***"
+      },
+      {
+        "id": 1667,
+        "service-policy": {
+          "input": "police-500M",
+          "output": "shape-500M"
+        },
+        "description": "*** VPN8468 INET_1667 ***"
+      },
+      {
+        "id": 1928,
+        "service-policy": {
+          "input": "police-200M",
+          "output": "shape-200M"
+        },
+        "description": "*** VPN8446 INET_1928 ***"
+      },
+      {
+        "id": 2356,
+        "service-policy": {},
+        "description": "*** VPN7584 DMZ_2356 ***"
+      },
+      {
+        "id": 2675,
+        "service-policy": {
+          "input": "police-1G",
+          "output": "shape-1G"
+        },
+        "description": "*** VPN6359 MTS_2675 ***"
+      },
+      {
+        "id": 2812,
+        "service-policy": {},
+        "description": "*** VPN1661 RETAIL_2812 ***"
+      },
+      {
+        "id": 2835,
+        "service-policy": {},
+        "description": "*** VPN5132 ABV_2835 ***"
+      },
+      {
+        "id": 2934,
+        "service-policy": {
+          "input": "police-50M",
+          "output": "shape-50M"
+        },
+        "description": "*** VPN8295 ABV_2934 ***"
+      },
+      {
+        "id": 2962,
+        "service-policy": {},
+        "description": "*** VPN5854 DMZ_2962 ***"
+      },
+      {
+        "id": 3349,
+        "service-policy": {
+          "input": "police-1G",
+          "output": "shape-1G"
+        },
+        "description": "*** VPN5556 DMZ_3349 ***"
+      },
+      {
+        "id": 3355,
+        "service-policy": {
+          "input": "police-1G",
+          "output": "shape-1G"
+        },
+        "description": "*** VPN9017 MTS_3355 ***"
+      },
+      {
+        "id": 3398,
+        "service-policy": {
+          "input": "police-2G",
+          "output": "shape-2G"
+        },
+        "description": "*** VPN2537 LLS_3398 ***"
+      },
+      {
+        "id": 3514,
+        "service-policy": {},
+        "description": "*** VPN9057 CORP_3514 ***"
+      },
+      {
+        "id": 3756,
+        "service-policy": {
+          "input": "police-1G",
+          "output": "shape-1G"
+        },
+        "description": "*** VPN5478 FGS_3756 ***"
+      },
+      {
+        "id": 3950,
+        "service-policy": {},
+        "description": "*** VPN7738 STS_3950 ***"
+      },
+      {
+        "id": 3994,
+        "service-policy": {
+          "input": "police-2G",
+          "output": "shape-2G"
+        },
+        "description": "*** VPN6894 CORP_3994 ***"
+      }
+    ]
+  },
+  "GigabitEthernet3": {
+    "description": "*** High-Density Cisco Trunk Line (GigabitEthernet3) ***",
+    "service_instance": [
+      {
+        "id": 4,
+        "service-policy": {
+          "input": "police-50M",
+          "output": "shape-50M"
+        },
+        "description": "*** VPN8043 INET_4 ***"
+      },
+      {
+        "id": 240,
+        "service-policy": {
+          "input": "police-20M",
+          "output": "shape-20M"
+        },
+        "description": "*** VPN1196 RETAIL_240 ***"
+      },
+      {
+        "id": 328,
+        "service-policy": {
+          "input": "police-500M",
+          "output": "shape-500M"
+        },
+        "description": "*** VPN2849 INET_328 ***"
+      },
+      {
+        "id": 635,
+        "service-policy": {
+          "input": "police-500M",
+          "output": "shape-500M"
+        },
+        "description": "*** VPN6204 FGS_635 ***"
+      },
+      {
+        "id": 670,
+        "service-policy": {
+          "input": "police-1G",
+          "output": "shape-1G"
+        },
+        "description": "*** VPN9116 DMZ_670 ***"
+      },
+      {
+        "id": 711,
+        "service-policy": {},
+        "description": "*** VPN5604 CORP_711 ***"
+      },
+      {
+        "id": 933,
+        "service-policy": {
+          "input": "police-1G",
+          "output": "shape-1G"
+        },
+        "description": "*** VPN4295 INET_933 ***"
+      },
+      {
+        "id": 1006,
+        "service-policy": {
+          "input": "police-1G",
+          "output": "shape-1G"
+        },
+        "description": "*** VPN8191 DMZ_1006 ***"
+      },
+      {
+        "id": 1136,
+        "service-policy": {
+          "input": "police-1G",
+          "output": "shape-1G"
+        },
+        "description": "*** VPN9759 FGS_1136 ***"
+      },
+      {
+        "id": 1162,
+        "service-policy": {
+          "input": "police-100M",
+          "output": "shape-100M"
+        },
+        "description": "*** VPN2103 ABV_1162 ***"
+      },
+      {
+        "id": 1715,
+        "service-policy": {},
+        "description": "*** VPN4690 DMZ_1715 ***"
+      },
+      {
+        "id": 1912,
+        "service-policy": {
+          "input": "police-50M",
+          "output": "shape-50M"
+        },
+        "description": "*** VPN3647 LLS_1912 ***"
+      },
+      {
+        "id": 2185,
+        "service-policy": {},
+        "description": "*** VPN6593 LLS_2185 ***"
+      },
+      {
+        "id": 2559,
+        "service-policy": {
+          "input": "police-200M",
+          "output": "shape-200M"
+        },
+        "description": "*** VPN2058 MTS_2559 ***"
+      },
+      {
+        "id": 2573,
+        "service-policy": {},
+        "description": "*** VPN9207 DMZ_2573 ***"
+      },
+      {
+        "id": 2863,
+        "service-policy": {
+          "input": "police-20M",
+          "output": "shape-20M"
+        },
+        "description": "*** VPN8218 ABV_2863 ***"
+      },
+      {
+        "id": 2865,
+        "service-policy": {},
+        "description": "*** VPN1408 INET_2865 ***"
+      },
+      {
+        "id": 2936,
+        "service-policy": {},
+        "description": "*** VPN8165 DMZ_2936 ***"
+      },
+      {
+        "id": 2992,
+        "service-policy": {},
+        "description": "*** VPN8860 STS_2992 ***"
+      },
+      {
+        "id": 3063,
+        "service-policy": {},
+        "description": "*** VPN1623 DMZ_3063 ***"
+      },
+      {
+        "id": 3232,
+        "service-policy": {},
+        "description": "*** VPN6116 MTS_3232 ***"
+      },
+      {
+        "id": 3287,
+        "service-policy": {
+          "input": "police-10M",
+          "output": "shape-10M"
+        },
+        "description": "*** VPN8634 CORP_3287 ***"
+      },
+      {
+        "id": 3347,
+        "service-policy": {
+          "input": "police-2G",
+          "output": "shape-2G"
+        },
+        "description": "*** VPN3271 MTS_3347 ***"
+      },
+      {
+        "id": 3502,
+        "service-policy": {
+          "input": "police-50M",
+          "output": "shape-50M"
+        },
+        "description": "*** VPN6063 CORP_3502 ***"
+      },
+      {
+        "id": 3710,
+        "service-policy": {
+          "input": "police-200M",
+          "output": "shape-200M"
+        },
+        "description": "*** VPN8207 RETAIL_3710 ***"
+      },
+      {
+        "id": 3983,
+        "service-policy": {
+          "input": "police-20M",
+          "output": "shape-20M"
+        },
+        "description": "*** VPN8017 STS_3983 ***"
       }
     ]
   },
   "GigabitEthernet4": {
-    "description": "*** MPLS Multi-Tenant Aggregation Trunk ***",
+    "description": "*** High-Density Cisco Trunk Line (GigabitEthernet4) ***",
     "service_instance": [
       {
-        "id": 101,
-        "service-policy": { "input": "police-20M", "output": "shape-20M" },
-        "description": "*** CORP_Finance_Department ***"
-      },
-      {
-        "id": 102,
-        "service-policy": { "input": "police-20M", "output": "shape-20M" },
-        "description": "*** CORP_HR_Portal ***"
-      },
-      {
-        "id": 201,
-        "service-policy": { "input": "police-200M", "output": "shape-200M" },
-        "description": "*** RETAIL_Store_Front_POS ***"
-      },
-      {
-        "id": 202,
+        "id": 35,
         "service-policy": {},
-        "description": "*** RETAIL_CCTV_Feed ***"
+        "description": "*** VPN5256 DMZ_35 ***"
       },
       {
-        "id": 305,
+        "id": 327,
+        "service-policy": {
+          "input": "police-500M",
+          "output": "shape-500M"
+        },
+        "description": "*** VPN9746 RETAIL_327 ***"
+      },
+      {
+        "id": 431,
         "service-policy": {},
-        "description": "*** PARTNER_Extranet_Access ***"
+        "description": "*** VPN5794 ABV_431 ***"
       },
       {
-        "id": 446,
-        "service-policy": { "input": "police-50M", "output": "shape-50M" },
-        "description": "*** GOVT_Secure_Channel ***"
+        "id": 472,
+        "service-policy": {
+          "input": "police-20M",
+          "output": "shape-20M"
+        },
+        "description": "*** VPN2489 ABV_472 ***"
       },
       {
-        "id": 553,
+        "id": 481,
         "service-policy": {},
-        "description": "*** IOT_Telemetry_Sensors ***"
+        "description": "*** VPN5986 ABV_481 ***"
       },
       {
-        "id": 1002,
-        "service-policy": { "input": "police-1G", "output": "shape-1G" },
-        "description": "*** DATA_CENTER_Replication ***"
+        "id": 640,
+        "service-policy": {
+          "input": "police-500M",
+          "output": "shape-500M"
+        },
+        "description": "*** VPN4772 RETAIL_640 ***"
       },
       {
-        "id": 2003,
+        "id": 655,
         "service-policy": {},
-        "description": "*** LAB_Testing_Environment ***"
+        "description": "*** VPN3668 INET_655 ***"
       },
       {
-        "id": 4000,
-        "service-policy": { "input": "police-10M", "output": "shape-10M" },
-        "description": "*** GUEST_Internet_Public ***"
+        "id": 726,
+        "service-policy": {},
+        "description": "*** VPN2970 ABV_726 ***"
+      },
+      {
+        "id": 923,
+        "service-policy": {
+          "input": "police-200M",
+          "output": "shape-200M"
+        },
+        "description": "*** VPN2224 MTS_923 ***"
+      },
+      {
+        "id": 925,
+        "service-policy": {},
+        "description": "*** VPN1769 STS_925 ***"
+      },
+      {
+        "id": 1015,
+        "service-policy": {},
+        "description": "*** VPN4244 RETAIL_1015 ***"
+      },
+      {
+        "id": 1041,
+        "service-policy": {
+          "input": "police-500M",
+          "output": "shape-500M"
+        },
+        "description": "*** VPN1530 LLS_1041 ***"
+      },
+      {
+        "id": 1213,
+        "service-policy": {},
+        "description": "*** VPN1518 STS_1213 ***"
+      },
+      {
+        "id": 1430,
+        "service-policy": {},
+        "description": "*** VPN3625 LLS_1430 ***"
+      },
+      {
+        "id": 1546,
+        "service-policy": {
+          "input": "police-50M",
+          "output": "shape-50M"
+        },
+        "description": "*** VPN1816 FGS_1546 ***"
+      },
+      {
+        "id": 1666,
+        "service-policy": {},
+        "description": "*** VPN8299 FGS_1666 ***"
+      },
+      {
+        "id": 1703,
+        "service-policy": {},
+        "description": "*** VPN5737 STS_1703 ***"
+      },
+      {
+        "id": 2372,
+        "service-policy": {
+          "input": "police-20M",
+          "output": "shape-20M"
+        },
+        "description": "*** VPN1033 INET_2372 ***"
+      },
+      {
+        "id": 2490,
+        "service-policy": {
+          "input": "police-500M",
+          "output": "shape-500M"
+        },
+        "description": "*** VPN7667 ABV_2490 ***"
+      },
+      {
+        "id": 2517,
+        "service-policy": {},
+        "description": "*** VPN8910 CORP_2517 ***"
+      },
+      {
+        "id": 2561,
+        "service-policy": {
+          "input": "police-20M",
+          "output": "shape-20M"
+        },
+        "description": "*** VPN6791 ABV_2561 ***"
+      },
+      {
+        "id": 2581,
+        "service-policy": {
+          "input": "police-10M",
+          "output": "shape-10M"
+        },
+        "description": "*** VPN9352 LLS_2581 ***"
+      },
+      {
+        "id": 2865,
+        "service-policy": {
+          "input": "police-100M",
+          "output": "shape-100M"
+        },
+        "description": "*** VPN8690 DMZ_2865 ***"
+      },
+      {
+        "id": 2902,
+        "service-policy": {},
+        "description": "*** VPN4197 DMZ_2902 ***"
+      },
+      {
+        "id": 3084,
+        "service-policy": {},
+        "description": "*** VPN8412 CORP_3084 ***"
+      },
+      {
+        "id": 3276,
+        "service-policy": {},
+        "description": "*** VPN1220 RETAIL_3276 ***"
+      },
+      {
+        "id": 3846,
+        "service-policy": {},
+        "description": "*** VPN1267 LLS_3846 ***"
       }
     ]
   },
   "TenGigabitEthernet0/0/0": {
-    "description": "*** Core-Switch-Stack-Trunking ***",
+    "description": "*** High-Density Cisco Trunk Line (TenGigabitEthernet0/0/0) ***",
     "service_instance": [
       {
-        "id": 1000,
-        "service-policy": { "input": "police-2G", "output": "shape-2G" },
-        "description": "*** Transit_VLAN_Core1 ***"
+        "id": 162,
+        "service-policy": {
+          "input": "police-1G",
+          "output": "shape-1G"
+        },
+        "description": "*** VPN7590 CORP_162 ***"
       },
       {
-        "id": 2000,
-        "service-policy": { "input": "police-2G", "output": "shape-2G" },
-        "description": "*** Transit_VLAN_Core2 ***"
+        "id": 389,
+        "service-policy": {},
+        "description": "*** VPN3817 FGS_389 ***"
+      },
+      {
+        "id": 711,
+        "service-policy": {},
+        "description": "*** VPN4602 CORP_711 ***"
+      },
+      {
+        "id": 736,
+        "service-policy": {
+          "input": "police-2G",
+          "output": "shape-2G"
+        },
+        "description": "*** VPN7593 INET_736 ***"
+      },
+      {
+        "id": 761,
+        "service-policy": {
+          "input": "police-10M",
+          "output": "shape-10M"
+        },
+        "description": "*** VPN3205 RETAIL_761 ***"
+      },
+      {
+        "id": 1025,
+        "service-policy": {
+          "input": "police-50M",
+          "output": "shape-50M"
+        },
+        "description": "*** VPN8708 RETAIL_1025 ***"
+      },
+      {
+        "id": 1172,
+        "service-policy": {
+          "input": "police-20M",
+          "output": "shape-20M"
+        },
+        "description": "*** VPN7074 RETAIL_1172 ***"
+      },
+      {
+        "id": 1504,
+        "service-policy": {
+          "input": "police-10M",
+          "output": "shape-10M"
+        },
+        "description": "*** VPN7155 RETAIL_1504 ***"
+      },
+      {
+        "id": 1620,
+        "service-policy": {},
+        "description": "*** VPN1690 STS_1620 ***"
+      },
+      {
+        "id": 2012,
+        "service-policy": {},
+        "description": "*** VPN9329 MTS_2012 ***"
+      },
+      {
+        "id": 2030,
+        "service-policy": {},
+        "description": "*** VPN3486 DMZ_2030 ***"
+      },
+      {
+        "id": 2215,
+        "service-policy": {},
+        "description": "*** VPN9798 INET_2215 ***"
+      },
+      {
+        "id": 2279,
+        "service-policy": {
+          "input": "police-100M",
+          "output": "shape-100M"
+        },
+        "description": "*** VPN7050 DMZ_2279 ***"
+      },
+      {
+        "id": 2427,
+        "service-policy": {},
+        "description": "*** VPN3278 LLS_2427 ***"
+      },
+      {
+        "id": 2449,
+        "service-policy": {
+          "input": "police-500M",
+          "output": "shape-500M"
+        },
+        "description": "*** VPN7339 STS_2449 ***"
+      },
+      {
+        "id": 2559,
+        "service-policy": {
+          "input": "police-20M",
+          "output": "shape-20M"
+        },
+        "description": "*** VPN8880 CORP_2559 ***"
+      },
+      {
+        "id": 2564,
+        "service-policy": {
+          "input": "police-1G",
+          "output": "shape-1G"
+        },
+        "description": "*** VPN1171 LLS_2564 ***"
+      },
+      {
+        "id": 3076,
+        "service-policy": {},
+        "description": "*** VPN2596 MTS_3076 ***"
+      },
+      {
+        "id": 3159,
+        "service-policy": {
+          "input": "police-50M",
+          "output": "shape-50M"
+        },
+        "description": "*** VPN6442 STS_3159 ***"
+      },
+      {
+        "id": 3223,
+        "service-policy": {},
+        "description": "*** VPN1433 DMZ_3223 ***"
+      }
+    ]
+  },
+  "TenGigabitEthernet0/0/1": {
+    "description": "*** High-Density Cisco Trunk Line (TenGigabitEthernet0/0/1) ***",
+    "service_instance": [
+      {
+        "id": 155,
+        "service-policy": {},
+        "description": "*** VPN2141 LLS_155 ***"
+      },
+      {
+        "id": 328,
+        "service-policy": {},
+        "description": "*** VPN6820 CORP_328 ***"
+      },
+      {
+        "id": 347,
+        "service-policy": {
+          "input": "police-200M",
+          "output": "shape-200M"
+        },
+        "description": "*** VPN4338 DMZ_347 ***"
+      },
+      {
+        "id": 1030,
+        "service-policy": {},
+        "description": "*** VPN2735 STS_1030 ***"
+      },
+      {
+        "id": 1168,
+        "service-policy": {},
+        "description": "*** VPN3179 RETAIL_1168 ***"
+      },
+      {
+        "id": 1306,
+        "service-policy": {},
+        "description": "*** VPN6980 DMZ_1306 ***"
+      },
+      {
+        "id": 1322,
+        "service-policy": {
+          "input": "police-500M",
+          "output": "shape-500M"
+        },
+        "description": "*** VPN2852 RETAIL_1322 ***"
+      },
+      {
+        "id": 1366,
+        "service-policy": {},
+        "description": "*** VPN2985 LLS_1366 ***"
+      },
+      {
+        "id": 1599,
+        "service-policy": {},
+        "description": "*** VPN2350 INET_1599 ***"
+      },
+      {
+        "id": 1609,
+        "service-policy": {},
+        "description": "*** VPN5143 STS_1609 ***"
+      },
+      {
+        "id": 1917,
+        "service-policy": {
+          "input": "police-50M",
+          "output": "shape-50M"
+        },
+        "description": "*** VPN4550 RETAIL_1917 ***"
+      },
+      {
+        "id": 2093,
+        "service-policy": {
+          "input": "police-20M",
+          "output": "shape-20M"
+        },
+        "description": "*** VPN8742 INET_2093 ***"
+      },
+      {
+        "id": 2214,
+        "service-policy": {},
+        "description": "*** VPN7347 LLS_2214 ***"
+      },
+      {
+        "id": 2216,
+        "service-policy": {},
+        "description": "*** VPN3035 FGS_2216 ***"
+      },
+      {
+        "id": 2365,
+        "service-policy": {
+          "input": "police-50M",
+          "output": "shape-50M"
+        },
+        "description": "*** VPN8591 MTS_2365 ***"
+      },
+      {
+        "id": 2819,
+        "service-policy": {
+          "input": "police-500M",
+          "output": "shape-500M"
+        },
+        "description": "*** VPN4493 DMZ_2819 ***"
+      },
+      {
+        "id": 2840,
+        "service-policy": {},
+        "description": "*** VPN9011 INET_2840 ***"
+      },
+      {
+        "id": 3398,
+        "service-policy": {
+          "input": "police-200M",
+          "output": "shape-200M"
+        },
+        "description": "*** VPN7363 DMZ_3398 ***"
+      },
+      {
+        "id": 3795,
+        "service-policy": {
+          "input": "police-100M",
+          "output": "shape-100M"
+        },
+        "description": "*** VPN2029 INET_3795 ***"
+      },
+      {
+        "id": 3825,
+        "service-policy": {
+          "input": "police-100M",
+          "output": "shape-100M"
+        },
+        "description": "*** VPN3510 STS_3825 ***"
+      },
+      {
+        "id": 3918,
+        "service-policy": {},
+        "description": "*** VPN8631 RETAIL_3918 ***"
+      },
+      {
+        "id": 3959,
+        "service-policy": {
+          "input": "police-2G",
+          "output": "shape-2G"
+        },
+        "description": "*** VPN5870 STS_3959 ***"
+      },
+      {
+        "id": 3979,
+        "service-policy": {
+          "input": "police-1G",
+          "output": "shape-1G"
+        },
+        "description": "*** VPN1559 FGS_3979 ***"
       }
     ]
   },
   "BDI100": {
-    "description": "VLAN100_Internal_Users",
+    "description": "Internal Core Gateway BDI100",
     "service_instance": []
   },
   "BDI200": {
-    "description": "VLAN200_Server_Farm",
+    "description": "Internal Core Gateway BDI200",
     "service_instance": []
   }
 }

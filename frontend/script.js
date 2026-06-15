@@ -140,7 +140,7 @@ function displayResults(data) {
         if (hideNoServicePolicy && (!config.service_instance || config.service_instance.length === 0)) continue;
         const interfaceCard = document.createElement('interface-card');
         customElements.whenDefined('interface-card').then(() => {
-            interfaceCard.setContext(interfaceName, config);
+            interfaceCard.setContext(current_device, interfaceName, config);
         });
         document.body.appendChild(interfaceCard);
         interfaceContainer.appendChild(interfaceCard);

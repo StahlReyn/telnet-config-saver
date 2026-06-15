@@ -1,11 +1,13 @@
 export class InterfaceCard extends HTMLElement {
     constructor() {
         super();
+        this._device = null;
         this._config = null;
         this._interfaceName = '';
     }
 
-    setContext(interfaceName, interfaceConfig) {
+    setContext(device, interfaceName, interfaceConfig) {
+        this._device = device
         this._interfaceName = interfaceName;
         this._config = interfaceConfig;
         this.render();
@@ -21,7 +23,7 @@ export class InterfaceCard extends HTMLElement {
         const { type, interfaceName, instanceId, policyName } = event.detail;
 
         const currentPayload = {
-            "device": current_device, // Using existing global or context state safely
+            "device": device,
             "policy": {
                 "interface": interfaceName,
                 "service_instance_id": instanceId,
